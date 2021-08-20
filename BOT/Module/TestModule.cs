@@ -24,6 +24,7 @@ namespace BOT.Module
             {
                 foreach (var message in receiver.MessageChain.WhereAndCast<PlainMessage>())
                 {
+                    
                     Console.WriteLine("message=" + message.Text);
                     var m = ParseHelper.GroupCommandAsync(message.Text,0,receiver);
                     if (m.Result != null)

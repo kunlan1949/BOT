@@ -54,11 +54,10 @@ namespace BOT.Helper
             if (c.Count !=3)
             {
                 var bot = Init.Instance();
-                msg = commandType + " target params";
                 var mgr = bot.GetManager<MessageManager>();
                 if (type == 0)
                 {
-                    await mgr.SendGroupMessage(messageReceiver.Sender.Group.Id, "".Append(new AtMessage(messageReceiver.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
+                       await mgr.SendGroupMessage(messageReceiver.Sender.Group.Id, "".Append(new AtMessage(messageReceiver.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
                 }
                 else
                 {

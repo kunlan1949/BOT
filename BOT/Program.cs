@@ -7,6 +7,9 @@ using Mirai.Net.Utils.Extensions;
 using System.Linq;
 using BOT.Helper;
 using BOT.Module;
+using Mirai.Net.Data.Events.Concretes.Request;
+using System.Reactive.Linq;
+using Mirai.Net.Data.Events;
 
 namespace BOT
 {
@@ -35,6 +38,17 @@ namespace BOT
                 {
                     module1.Execute(x, x.MessageChain.First());
                 });
+
+            bot.EventReceived.Where(x => x.Type == Events.NewFriendRequested)
+            .Cast<NewFriendRequestedEvent>().Subscribe(x =>
+            {
+                //do things
+            });
+            bot.EventReceived.Where(x => x.Type == Events.NewInvitationRequested)
+            .Cast<NewInvitationRequestedEvent>().Subscribe(x =>
+            {
+                //do things
+            });
 
             while (true)
             {
