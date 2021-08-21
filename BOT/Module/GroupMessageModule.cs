@@ -14,7 +14,7 @@ using BOT.Helper;
 
 namespace BOT.Module
 {
-    public class TestModule : IModule
+    public class GroupMessageModule : IModule
     {
         public bool? IsEnable { get; set; }
 

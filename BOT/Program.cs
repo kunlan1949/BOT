@@ -10,6 +10,9 @@ using BOT.Module;
 using Mirai.Net.Data.Events.Concretes.Request;
 using System.Reactive.Linq;
 using Mirai.Net.Data.Events;
+using BOT.Module.Event;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace BOT
 {
@@ -17,12 +20,14 @@ namespace BOT
     {
         static async Task Main(string[] args)
         {
+            // Application code should start here.
+
             //string message = "/exec -arg mm";
             //var parse = CommandParse.Parse(message);
             //Console.WriteLine(parse.First().Key);
             var bot = Init.Instance();
 
-            await bot.Launch().ContinueWith((e)=>{
+            await bot.Launch().ContinueWith((e) => {
                 Console.WriteLine("启动成功");
             });
 
@@ -30,19 +35,20 @@ namespace BOT
                 .LoadCommandModules("BOT.Module")
                 .ExcludeDisabledModules()
                 .ToList();
-            var module1 = new TestModule();
+            var groupMessage = new GroupMessageModule();
+            var newFriendRequested = new NewFriendRequestedModule();
             //传播订阅到模块
             bot.MessageReceived
                 .WhereAndCast<GroupMessageReceiver>()
                 .Subscribe(x =>
                 {
-                    module1.Execute(x, x.MessageChain.First());
+                    groupMessage.Execute(x, x.MessageChain.First());
                 });
 
             bot.EventReceived.Where(x => x.Type == Events.NewFriendRequested)
             .Cast<NewFriendRequestedEvent>().Subscribe(x =>
             {
-                //do things
+                newFriendRequested.Execute(x);
             });
             bot.EventReceived.Where(x => x.Type == Events.NewInvitationRequested)
             .Cast<NewInvitationRequestedEvent>().Subscribe(x =>
@@ -50,13 +56,36 @@ namespace BOT
                 //do things
             });
 
-            while (true)
-            {
-                if (Console.ReadLine() == "exit")
-                {
-                    return;
-                }
-            }
+
+            using IHost host = CreateHostBuilder(args).Build();
+
+            await host.RunAsync();
         }
+        static IHostBuilder CreateHostBuilder(string[] args) =>
+                    Host.CreateDefaultBuilder(args)
+                        .ConfigureAppConfiguration((hostingContext, configuration) =>
+                        {
+                            configuration.Sources.Clear();
+
+                            IHostEnvironment env = hostingContext.HostingEnvironment;
+
+                            configuration
+                                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+
+                            IConfigurationRoot configurationRoot = configuration.Build();
+
+                            TransientFaultHandlingOptions options = new();
+                            configurationRoot.GetSection(nameof(TransientFaultHandlingOptions))
+                                             .Bind(options);
+
+                            Console.WriteLine($"TransientFaultHandlingOptions.Enabled={options.Enabled}");
+                            Console.WriteLine($"TransientFaultHandlingOptions.AutoRetryDelay={options.AutoRetryDelay}");
+                        });
+
+        //static async Task Main(string[] args)
+        //{
+
+        //}
     }
 }
