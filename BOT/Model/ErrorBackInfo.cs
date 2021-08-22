@@ -13,7 +13,7 @@ namespace BOT.Model
             string e = "";
             if(type==CommandType.EXEC)
             {
-                e = $"你的{CommandType.EXEC}命令有错误,正确形式为:{CommandType.EXEC} target params";
+                e = $"错误的{CommandType.EXEC}命令,正确形式为: 【{CommandType.EXEC}】【target】 [params] NOTE：【必填】[选填]）";
             }
             return e;
         }

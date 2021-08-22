@@ -45,6 +45,7 @@ namespace Db.Bot
             // 这里验证参数范围，建议抛出参数异常，指定参数名，前端用户界面可以捕获参数异常并聚焦到对应的参数输入框
             if (AdminId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(AdminId), "根管理员id不能为空！");
             if (AdminQq.IsNullOrEmpty()) throw new ArgumentNullException(nameof(AdminQq), "根管理员QQ不能为空！");
+            if (AdminCreateTime.IsNullOrEmpty()) throw new ArgumentNullException(nameof(AdminCreateTime), "根管理员创建时间不能为空！");
 
             // 建议先调用基类方法，基类方法会做一些统一处理
             base.Valid(isNew);
@@ -65,6 +66,8 @@ namespace Db.Bot
         //    entity.Idx = 0;
         //    entity.AdminId = "abc";
         //    entity.AdminQq = "abc";
+        //    entity.AdminCreateTime = "abc";
+        //    entity.AdminNick = "abc";
         //    entity.Insert();
 
         //    if (XTrace.Debug) XTrace.WriteLine("完成初始化RootAdmin[RootAdmin]数据！");

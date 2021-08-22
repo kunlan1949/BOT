@@ -11,24 +11,29 @@ using Mirai.Net.Utils.Extensions;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Utils.Extensions.Actions;
 using BOT.Helper;
+using Mirai.Net.Sessions;
+using Mirai.Net.Sessions.Http.Concretes;
 
 namespace BOT.Module
 {
-    public class GroupMessageModule : IModule
+    public class GroupMessageModule
     {
-        public bool? IsEnable { get; set; }
 
-        public async void Execute(MessageReceiverBase @base,MessageBase executeMessage)
+
+        public void Execute(MessageReceiverBase @base,MessageBase executeMessage)
         {
             if (@base is GroupMessageReceiver receiver)
             {
                 foreach (var message in receiver.MessageChain.WhereAndCast<PlainMessage>())
                 {
+
+                    receiver.SendGroupMessage();
                     
                     Console.WriteLine("message=" + message.Text);
-                    var m = ParseHelper.GroupCommandAsync(message.Text,0,receiver);
+                    var m = ParseHelper.GroupCommandAsync(message.Text,receiver);
                     if (m.Result != null)
                     {
+                        
                         Console.WriteLine($"指令发送:【{m.Result.CommandType}】【{m.Result.Target}】【{m.Result.Params}】");
                     }
                     else

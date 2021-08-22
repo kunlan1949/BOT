@@ -4,8 +4,11 @@ using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages.Receivers;
 using Mirai.Net.Data.Modules;
+using Mirai.Net.Sessions;
 using Mirai.Net.Sessions.Http.Concretes;
+using Mirai.Net.Utils;
 using Mirai.Net.Utils.Extensions;
+using Mirai.Net.Utils.Extensions.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +27,7 @@ namespace BOT.Helper
             return c;
         }
 
-        public static async Task<CommandAttribute> GroupCommandAsync(string command,int type, GroupMessageReceiver messageReceiver)
+        public static async Task<CommandAttribute> GroupCommandAsync(string command, GroupMessageReceiver messageReceiver)
         {
             List<string> c = CommandStringParse(command);
             var commandType = "";
@@ -53,16 +56,14 @@ namespace BOT.Helper
 
             if (c.Count !=3)
             {
-                var bot = Init.Instance();
-                var mgr = bot.GetManager<MessageManager>();
-                if (type == 0)
-                {
-                       await mgr.SendGroupMessage(messageReceiver.Sender.Group.Id, "".Append(new AtMessage(messageReceiver.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
-                }
-                else
-                {
-                    await mgr.SendFriendMessage("","".Append());
-                }
+
+                await MiraiBotFactory.Bot
+                .GetManager<MessageManager>().SendGroupMessage(messageReceiver.Sender.Group.Id, "".Append(new AtMessage(messageReceiver.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
+                //}
+                //else
+                //{
+                //    await mgr.SendFriendMessage("","".Append());
+                //}
               
             }
             else
@@ -86,7 +87,79 @@ namespace BOT.Helper
                 return null;
             }
         }
+        public static async Task<CommandAttribute> FriendCommandAsync(string command, FriendMessageReceiver messageReceiver)
+        {
+            List<string> c = CommandStringParse(command);
+            var commandType = "";
+            var commandRight = true;
+            var msg = "";
+            if (c[0].Contains(CommandType.EXEC))
+            {
+                commandType = CommandType.EXEC;
+                if (c.Count <= 1)
+                {
+                    commandRight = false;
+                    await messageReceiver.SendFriendMessage("".Append(ErrorBackInfo.ErrorBack(commandType)));
+                }
+            }
+            else if (c[0].Contains(CommandType.ON))
+            {
+                commandType = CommandType.ON;
+            }
+            else if (c[0].Contains(CommandType.OFF))
+            {
+                commandType = CommandType.OFF;
+            }
+            else if (c[0].Contains(CommandType.CopyRead))
+            {
+                commandType = CommandType.CopyRead;
+            }
+            else if (c[0].Contains(CommandType.HELP))
+            {
+                commandType = CommandType.HELP;
+            }
+            else if (c[0].Contains(CommandType.YESNO))
+            {
+                commandType = CommandType.YESNO;
+            }
+
+            else
+            {
+                return null;
+            }
+
+            
+
+            if (commandRight)
+            {
+                var p = "";
+                if (c.Count <= 2)
+                {
+                    p = "";
+                }
+                else
+                {
+                    p = c[2];
+                }
+                var attribute = new CommandAttribute
+                {
+                    CommandType = commandType,
+                    Target = c[1],
+                    Params = p
+
+                };
+                return attribute;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    
+
     }
+
+   
 
     //    public static IDictionary<string, string[]> Parse(string s)
     //    {

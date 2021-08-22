@@ -25,7 +25,6 @@ namespace BOT.Module.Event
                 if (m != null)
                 {
                     Console.Write("属于根管理员");
-
                 }
                 else
                 {

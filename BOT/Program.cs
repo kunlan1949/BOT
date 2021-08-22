@@ -10,9 +10,10 @@ using BOT.Module;
 using Mirai.Net.Data.Events.Concretes.Request;
 using System.Reactive.Linq;
 using Mirai.Net.Data.Events;
-using BOT.Module.Event;
+using BOT.Module.Message;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using Mirai.Net.Sessions.Http.Concretes;
 
 namespace BOT
 {
@@ -20,44 +21,66 @@ namespace BOT
     {
         static async Task Main(string[] args)
         {
-            // Application code should start here.
-
             //string message = "/exec -arg mm";
             //var parse = CommandParse.Parse(message);
             //Console.WriteLine(parse.First().Key);
-            var bot = Init.Instance();
 
-            await bot.Launch().ContinueWith((e) => {
+            using IHost host = CreateHostBuilder(args).Build();
+
+           
+
+            using var bot = new MiraiBot
+            {
+                Address = "localhost:8080",
+                QQ = 1432119304,
+                VerifyKey = "2048437217"
+            };
+
+            await bot.Launch().ContinueWith((e)=>{
                 Console.WriteLine("启动成功");
+                
             });
 
-            var modules = CommandUtilities
-                .LoadCommandModules("BOT.Module")
-                .ExcludeDisabledModules()
-                .ToList();
-            var groupMessage = new GroupMessageModule();
-            var newFriendRequested = new NewFriendRequestedModule();
-            //传播订阅到模块
+            //var modules = CommandUtilities
+            //    .LoadCommandModules("BOT.Module")
+            //    .ExcludeDisabledModules()
+            //    .ToList();
+            var groupMsg = new GroupMessageModule();
+            var friendMsg = new FriendMessageModule();
+            ///消息处理
+            ///
+            ///好友消息
+            bot.MessageReceived
+               .WhereAndCast<FriendMessageReceiver>()
+               .Subscribe(x =>
+               {
+                   friendMsg.Execute(x, x.MessageChain.First());
+               });
+
+            ///群聊消息
             bot.MessageReceived
                 .WhereAndCast<GroupMessageReceiver>()
                 .Subscribe(x =>
                 {
-                    groupMessage.Execute(x, x.MessageChain.First());
+                    groupMsg.Execute(x, x.MessageChain.First());
                 });
 
+            ///事件处理
+            ///
+            ///加好友请求
             bot.EventReceived.Where(x => x.Type == Events.NewFriendRequested)
             .Cast<NewFriendRequestedEvent>().Subscribe(x =>
             {
-                newFriendRequested.Execute(x);
+                
             });
+
+            ///被邀请入群申请
             bot.EventReceived.Where(x => x.Type == Events.NewInvitationRequested)
             .Cast<NewInvitationRequestedEvent>().Subscribe(x =>
             {
-                //do things
+               
             });
 
-
-            using IHost host = CreateHostBuilder(args).Build();
 
             await host.RunAsync();
         }
@@ -83,9 +106,5 @@ namespace BOT
                             Console.WriteLine($"TransientFaultHandlingOptions.AutoRetryDelay={options.AutoRetryDelay}");
                         });
 
-        //static async Task Main(string[] args)
-        //{
-
-        //}
     }
 }

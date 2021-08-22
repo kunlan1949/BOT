@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\C#Project\Mirai.Net-2.1\Mirai.Net\Mirai.Net.csproj" />
+    <ProjectReference Include="..\MiraiNetLibrary\MiraiNetLibrary.csproj" />
   </ItemGroup>
 
 </Project>
