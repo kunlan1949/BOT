@@ -53,7 +53,7 @@ namespace Db.Bot
         /// <summary>任务命令参数</summary>
         [DisplayName("任务命令参数")]
         [Description("任务命令参数")]
-        [DataObjectField(false, false, false, 255)]
+        [DataObjectField(false, false, true, 255)]
         [BindColumn("m_param", "任务命令参数", "varchar(255)")]
         public String MParam { get => _MParam; set { if (OnPropertyChanging("MParam", value)) { _MParam = value; OnPropertyChanged("MParam"); } } }
 

@@ -15,14 +15,9 @@ namespace BOT.Module.Send
 {
     class SendGroupMessageModule
     {
-        public async void Executed(MiraiBot bot, MessageBase messageBase, MessageReceiverBase receiver)
+        public async void Executed(MessageBase messageBase, GroupMessageReceiver receiver)
         {
-            if (receiver is GroupMessageReceiver groupMessage)
-            {
-                var mgr = bot.GetManager<MessageManager>();
-
-               // await mgr.SendGroupMessage(groupMessage.Sender.Group.Id, "".Append(new AtMessage(groupMessage.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
-            }
+            
         }
     }
 }

@@ -38,10 +38,19 @@ namespace BOT.Handler
                 {
                     RootAdminAction.RemoveRootAdminAsync(command, messageReceiver, exec);
                 }
+                
                 else
                 {
 
                 }
+            }
+            else if (command.CommandType.Contains(CommandType.ADDADMIN))
+            {
+                AdminAction.AddAdminAsync(command, messageReceiver, exec);
+            }
+            else if (command.CommandType.Contains(CommandType.RMADMIN))
+            {
+                AdminAction.RemoveAdminAsync(command, messageReceiver, exec);
             }
             else if (command.CommandType.Contains(CommandType.HELP))
             {
@@ -69,6 +78,15 @@ namespace BOT.Handler
                              "例如：/exec rmRoot 10001\n" +
                              "NOTE:只有根权限账号才能使用此项功能"));
                         }
+                        else if (command.Params.Contains("2"))
+                        {
+                            await messageReceiver.SendFriendMessage("【添加删除管理员】\n\n".Append(
+                             "请输入【/addadmin】+【】+【QQ】来进行添加\n" +
+                             "例如：/exec addRoot 10001\n" +
+                             "请输入【/addadmin】+【rmadmin】+【QQ】来进行删除\n" +
+                             "例如：/exec rmadmin 10001\n" +
+                             "NOTE:只有根权限账号才能使用此项功能"));
+                        }
                         else
                         {
                           await errorAsync(messageReceiver, command);
@@ -90,6 +108,10 @@ namespace BOT.Handler
         }
 
 
+        public static async Task<string> GroupCommandAsync(CommandAttribute command, GroupMessageReceiver messageReceiver, bool exec)
+        {
+            return "";
+        }
 
         private static async Task errorAsync(FriendMessageReceiver receiver,CommandAttribute command)
         {

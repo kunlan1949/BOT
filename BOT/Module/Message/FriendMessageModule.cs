@@ -30,16 +30,16 @@ namespace BOT.Module.Message
                 foreach (var message in receiver.MessageChain.WhereAndCast<PlainMessage>())
                 {
                     Console.WriteLine("message=" + message.Text);
-                    
-                    
+
+
                     //校验是否为根管理员发布的指令
                     var r = RootAdmin.Find(RootAdmin._.AdminQq == receiver.Sender.Id);
-                    if (r!=null)
+                    if (r != null)
                     {
                         var f = ParseHelper.FriendCommandAsync(message.Text, receiver);
                         if (f.IsCompletedSuccessfully)
                         {
-                            f.ContinueWith ((m) => {
+                            f.ContinueWith((m) => {
                                 if (m.Result != null)
                                 {
                                     Console.WriteLine($"指令发送:【{m.Result.CommandType}】【{m.Result.Target}】【{m.Result.Params}】");
@@ -66,20 +66,20 @@ namespace BOT.Module.Message
                                         else
                                         {
                                             receiver.SendFriendMessage("".Append(
-                                            $"您有尚未解决的操作{mission.MType +" "+ mission.MTarget+" "+mission.MParam}\n" +
+                                            $"您有尚未解决的操作{mission.MType + " " + mission.MTarget + " " + mission.MParam}\n" +
                                             $"此操作需要您确认/yn 1 或者/yn 0"));
                                         }
-                                      
+
                                     }
                                     else
                                     {
-                                        CommandHandler.friendCommandAsync(m.Result, receiver,false);
+                                        CommandHandler.friendCommandAsync(m.Result, receiver, false);
                                     }
                                 }
-                               else
-                               {
-                                   Console.WriteLine($"【根管理员】{r.AdminQq}：{message.Text}");
-                               }
+                                else
+                                {
+                                    Console.WriteLine($"【根管理员】{r.AdminQq}：{message.Text}");
+                                }
 
                             });
                         }
@@ -87,15 +87,25 @@ namespace BOT.Module.Message
                         {
 
                         }
-                          
-                        
+
                     }
                     else
                     {
                         Console.WriteLine($"【非根管理员】{receiver.Sender.Id}：{message.Text}");
+                        var f = ParseHelper.FriendCommandAsync(message.Text, receiver);
+                        if (f.IsCompletedSuccessfully)
+                        {
+                            f.ContinueWith((m) =>
+                            {
+                                if (m.Result != null)
+                                {
+
+                                }
+                            });
+                         }
                     }
-                  
                 }
+                    
             }
         }
     }

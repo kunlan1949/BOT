@@ -19,5 +19,6 @@ namespace BOT.Model
         //管理员管理
         public static string ADDROOT = "addroot";
         public static string RMROOT = "rmroot";
+
     }
 }

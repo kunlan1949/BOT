@@ -25,11 +25,11 @@ using XCode.Membership;
 
 namespace Db.Bot
 {
-    /// <summary></summary>
-    public partial class TMission : Entity<TMission>
+    /// <summary>Admin,管理员表</summary>
+    public partial class TAdmin : Entity<TAdmin>
     {
         #region 对象操作
-        static TMission()
+        static TAdmin()
         {
 
             // 过滤器 UserModule、TimeModule、IPModule
@@ -43,10 +43,10 @@ namespace Db.Bot
             if (!HasDirty) return;
 
             // 这里验证参数范围，建议抛出参数异常，指定参数名，前端用户界面可以捕获参数异常并聚焦到对应的参数输入框
-            if (MId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MId), "任务所属QQ不能为空！");
-            if (MType.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MType), "任务命令类型不能为空！");
-            if (MTarget.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MTarget), "任务命令目标不能为空！");
-            if (MFinish.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MFinish), "任务是否完成不能为空！");
+            if (AdminId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(AdminId), "管理员QQ号不能为空！");
+            if (AdminProtect.IsNullOrEmpty()) throw new ArgumentNullException(nameof(AdminProtect), "管理员是否收到保护不能为空！");
+            if (AdminCreateTime.IsNullOrEmpty()) throw new ArgumentNullException(nameof(AdminCreateTime), "管理员创建的时间不能为空！");
+            if (AdminLimitAuthority.IsNullOrEmpty()) throw new ArgumentNullException(nameof(AdminLimitAuthority), "管理员权限等级不能为空！");
 
             // 建议先调用基类方法，基类方法会做一些统一处理
             base.Valid(isNew);
@@ -61,18 +61,20 @@ namespace Db.Bot
         //    // InitData一般用于当数据表没有数据时添加一些默认数据，该实体类的任何第一次数据库操作都会触发该方法，默认异步调用
         //    if (Meta.Session.Count > 0) return;
 
-        //    if (XTrace.Debug) XTrace.WriteLine("开始初始化TMission[TMission]数据……");
+        //    if (XTrace.Debug) XTrace.WriteLine("开始初始化TAdmin[Admin]数据……");
 
-        //    var entity = new TMission();
-        //    entity.MIdx = 0;
-        //    entity.MId = "abc";
-        //    entity.MType = "abc";
-        //    entity.MTarget = "abc";
-        //    entity.MParam = "abc";
-        //    entity.MFinish = "abc";
+        //    var entity = new TAdmin();
+        //    entity.AdminIdx = 0;
+        //    entity.AdminId = "abc";
+        //    entity.AdminProtect = "abc";
+        //    entity.AdminIdentify = "abc";
+        //    entity.AdminName = "abc";
+        //    entity.AdminNickName = "abc";
+        //    entity.AdminCreateTime = "abc";
+        //    entity.AdminLimitAuthority = "abc";
         //    entity.Insert();
 
-        //    if (XTrace.Debug) XTrace.WriteLine("完成初始化TMission[TMission]数据！");
+        //    if (XTrace.Debug) XTrace.WriteLine("完成初始化TAdmin[Admin]数据！");
         //}
 
         ///// <summary>已重载。基类先调用Valid(true)验证数据，然后在事务保护内调用OnInsert</summary>
@@ -94,27 +96,27 @@ namespace Db.Bot
         #endregion
 
         #region 扩展查询
-        /// <summary>根据任务idx查找</summary>
-        /// <param name="mIdx">任务idx</param>
+        /// <summary>根据管理员idx查找</summary>
+        /// <param name="adminIdx">管理员idx</param>
         /// <returns>实体对象</returns>
-        public static TMission FindByMIdx(Int32 mIdx)
+        public static TAdmin FindByAdminIdx(Int32 adminIdx)
         {
-            if (mIdx <= 0) return null;
+            if (adminIdx <= 0) return null;
 
             // 实体缓存
-            if (Meta.Session.Count < 1000) return Meta.Cache.Find(e => e.MIdx == mIdx);
+            if (Meta.Session.Count < 1000) return Meta.Cache.Find(e => e.AdminIdx == adminIdx);
 
             // 单对象缓存
-            return Meta.SingleCache[mIdx];
+            return Meta.SingleCache[adminIdx];
 
-            //return Find(_.MIdx == mIdx);
+            //return Find(_.AdminIdx == adminIdx);
         }
         #endregion
 
         #region 高级查询
 
-        // Select Count(MIdx) as MIdx,Category From t_mission Where CreateTime>'2020-01-24 00:00:00' Group By Category Order By MIdx Desc limit 20
-        //static readonly FieldCache<TMission> _CategoryCache = new FieldCache<TMission>(nameof(Category))
+        // Select Count(AdminIdx) as AdminIdx,Category From t_admin Where CreateTime>'2020-01-24 00:00:00' Group By Category Order By AdminIdx Desc limit 20
+        //static readonly FieldCache<TAdmin> _CategoryCache = new FieldCache<TAdmin>(nameof(Category))
         //{
         //Where = _.CreateTime > DateTime.Today.AddDays(-30) & Expression.Empty
         //};

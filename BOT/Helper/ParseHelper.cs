@@ -31,34 +31,39 @@ namespace BOT.Helper
         {
             List<string> c = CommandStringParse(command);
             var commandType = "";
-            var commandRight = false;
+            var commandRight = true;
             var msg = "";
             if (c[0].Contains(CommandType.EXEC))
             {
+                
                 commandType = CommandType.EXEC;
             }
-            else if (c[0].Contains(CommandType.ON))
+            else if (c[0].Contains(CommandType.BOTON))
             {
-                commandType = CommandType.ON;
+                commandType = CommandType.BOTON;
             }
-            else if (c[0].Contains(CommandType.OFF))
+            else if (c[0].Contains(CommandType.BOTOFF))
             {
-                commandType = CommandType.OFF;
+                commandType = CommandType.BOTOFF;
             }
             else if (c[0].Contains(CommandType.CopyRead))
             {
                 commandType = CommandType.CopyRead;
+            }
+            else if(c[0].Contains(CommandType.BOT))
+            {
+
+                commandType = CommandType.BOT;
             }
             else
             {
                 return null;
             }
 
-            if (c.Count !=3)
+            if (c.Count <=1)
             {
-
-                await MiraiBotFactory.Bot
-                .GetManager<MessageManager>().SendGroupMessage(messageReceiver.Sender.Group.Id, "".Append(new AtMessage(messageReceiver.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
+                commandRight = false;
+                await messageReceiver.SendGroupMessage("".Append(new AtMessage(messageReceiver.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
                 //}
                 //else
                 //{
@@ -66,18 +71,23 @@ namespace BOT.Helper
                 //}
               
             }
-            else
-            {
-                return null;
-            }
 
             if (commandRight)
             {
+                var p = "";
+                if (c.Count <= 2)
+                {
+                    p = "";
+                }
+                else
+                {
+                    p = c[2];
+                }
                 var attribute = new CommandAttribute
                 {
                     CommandType = commandType,
                     Target = c[1],
-                    Params = c[2]
+                    Params = p
 
                 };
                 return attribute;
@@ -102,13 +112,13 @@ namespace BOT.Helper
                     await messageReceiver.SendFriendMessage("".Append(ErrorBackInfo.ErrorBack(commandType)));
                 }
             }
-            else if (c[0].Contains(CommandType.ON))
+            else if (c[0].Contains(CommandType.BOTON))
             {
-                commandType = CommandType.ON;
+                commandType = CommandType.BOTON;
             }
-            else if (c[0].Contains(CommandType.OFF))
+            else if (c[0].Contains(CommandType.BOTOFF))
             {
-                commandType = CommandType.OFF;
+                commandType = CommandType.BOTOFF;
             }
             else if (c[0].Contains(CommandType.CopyRead))
             {
@@ -122,7 +132,14 @@ namespace BOT.Helper
             {
                 commandType = CommandType.YESNO;
             }
-
+            else if (c[0].Contains(CommandType.ADDADMIN))
+            {
+                commandType = CommandType.ADDADMIN;
+            }
+            else if (c[0].Contains(CommandType.RMADMIN))
+            {
+                commandType = CommandType.RMADMIN;
+            }
             else
             {
                 return null;
