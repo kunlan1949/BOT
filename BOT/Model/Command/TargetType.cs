@@ -20,5 +20,11 @@ namespace BOT.Model
         public static string ADDROOT = "addroot";
         public static string RMROOT = "rmroot";
 
+
+        //互动
+        public static string REGISTER = "注册";
+        public static string DELETE = "注销";
+        public static string GUSSNUM = "猜数字";
+        public static string CHENGYU = "成语接龙";
     }
 }

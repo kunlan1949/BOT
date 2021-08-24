@@ -50,10 +50,21 @@ namespace BOT.Helper
             {
                 commandType = CommandType.CopyRead;
             }
+            else if (c[0].Contains(CommandType.LOTTERY))
+            {
+                commandType = CommandType.LOTTERY;
+            }
             else if(c[0].Contains(CommandType.BOT))
             {
-
                 commandType = CommandType.BOT;
+            }
+            else if (c[0].Contains(CommandType.IGUSS))
+            {
+                commandType = CommandType.IGUSS;
+            }
+            else if (c[0].Contains(CommandType.CANCEL))
+            {
+                commandType = CommandType.CANCEL;
             }
             else
             {

@@ -14,6 +14,7 @@ using BOT.Module.Message;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Mirai.Net.Sessions.Http.Concretes;
+using BOT.Action;
 
 namespace BOT
 {
@@ -80,7 +81,7 @@ namespace BOT
             {
                
             });
-
+            TimerAction.LatteryOpen();
 
             await host.RunAsync();
         }

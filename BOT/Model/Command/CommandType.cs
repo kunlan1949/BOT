@@ -27,14 +27,15 @@ namespace BOT.Model
 
 
         //通用关键字
-        public static string GUSSNUM = "猜数字";
-
-
+        public static string IGUSS = "我猜";
+        public static string CANCEL = "结束";
+        public static string LOTTERY = "大乐透";
+        public static string CASHPRIZE = "兑奖";
         ///增加复读关键字
         ///【/copyread [你好,早上好]】
         public static string CopyRead = "/copyread";
 
-
+       
 
     }
 }

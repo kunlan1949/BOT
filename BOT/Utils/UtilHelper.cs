@@ -49,6 +49,15 @@ namespace BOT.Utils
             DateTimeOffset dto = new DateTimeOffset(dt);
             return dto.ToUnixTimeSeconds();
         }
+
+        public static string ToPoint(int num)
+        {
+            int p = 1;
+            var addon = Math.Pow(10, num-1);
+            p = (int)(p * addon); 
+
+            return p.ToString();
+        }
     }
     
 }

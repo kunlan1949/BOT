@@ -1,4 +1,4 @@
-﻿using BOT.Action;
+﻿using BOT.Actions;
 using BOT.Model;
 using BOT.Utils;
 using Db.Bot;
