@@ -54,6 +54,10 @@ namespace BOT.Helper
             {
                 commandType = CommandType.LOTTERY;
             }
+            else if (c[0].Contains(CommandType.CASHPRIZE))
+            {
+                commandType = CommandType.CASHPRIZE;
+            }
             else if(c[0].Contains(CommandType.BOT))
             {
                 commandType = CommandType.BOT;

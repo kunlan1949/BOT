@@ -239,7 +239,7 @@ namespace BOT.Handler
                 #endregion
                 else if (command.CommandType.Contains(CommandType.CASHPRIZE))
                 {
-                    if (command.Target.Length== 4 && command.Target != "" && RegUtil.IsUint(command.Target))
+                    if (command.Target.Length== 4 && command.Target != "")
                     {
                         var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish == 1);
                         //查询是否已投注
