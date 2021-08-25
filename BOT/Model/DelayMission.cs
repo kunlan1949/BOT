@@ -33,6 +33,8 @@ namespace BOT.Model
                             $"【{resultList[4]}】【{resultList[5]}】【{resultList[6]}】*【{resultList[7]}】【{resultList[8]}】【{resultList[9]}】\n" +
                             "大家中奖了吗？快来领取你的大乐透奖励吧!");
                     }
+                    
+                    l.LeOpen = 1;
                     l.LeFinish = 1;
                     l.LeResult = result;
                     l.Update();
@@ -46,9 +48,10 @@ namespace BOT.Model
             }
             else
             {
-
                 var ticket = new LotteryTicket();
                 ticket.LeFinish = 0;
+                l.LeOpen = 0;
+                l.LeBet = 1;
                 ticket.LeSn = UtilHelper.RandomGen(4, true, true, true);
                 ticket.LeId = UtilHelper.RandomGen(12, true, true, false);
                 ticket.Insert();

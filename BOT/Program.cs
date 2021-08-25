@@ -81,7 +81,7 @@ namespace BOT
             {
                
             });
-            TimerAction.LatteryOpen();
+            //TimerAction.LatteryOpen();
 
             await host.RunAsync();
         }

@@ -1,6 +1,7 @@
 ﻿using BOT.Actions;
 using BOT.Model;
 using BOT.Model.Game;
+using BOT.Module.Send;
 using BOT.Utils;
 using Db.Bot;
 using Mirai.Net.Data.Messages.Concretes;
@@ -96,8 +97,10 @@ namespace BOT.Handler
                             var count = game.GameCount - 1;
                             if (command.Target.Length == 4 && RegUtil.IsUint(command.Target))
                             {
-                                var gnum = command.Target.ToArray();
-                                var tnum = game.GameParams.ToArray();
+                              
+                                var gnum = command.Target.ToList();
+                                var ugnum = gnum.Distinct().ToList();
+                                var tnum = game.GameParams.ToList();
                                 int Acount = 0;
                                 int Bcount = 0;
                                 for (int k = 0; k < 4; k++)
@@ -108,9 +111,9 @@ namespace BOT.Handler
                                     }
                                     else
                                     {
-                                        for (int m = 0; m < 4; m++)
+                                        for (int m = 0; m < ugnum.Count; m++)
                                         {
-                                            if (tnum[k] == gnum[m])//比较这两个数组相应的值是否相等
+                                            if (tnum[k] == ugnum[m])//比较这两个数组相应的值是否相等
                                             {
                                                 Bcount++;
                                             }
@@ -190,29 +193,29 @@ namespace BOT.Handler
                 else if (command.CommandType.Contains(CommandType.LOTTERY))
                 {
                     
-                    if (command.Params!=null && command.Params!="" && RegUtil.IsUint(command.Params))
+                    if (command.Params!=null && command.Params!="" && RegUtil.IsUint(command.Params) && command.Target.Length == 7 && command.Params.Length == 3)
                     {
                         if (RegUtil.IsUint(command.Target) && !g.GrpLottery.Contains("-1"))
                         {
                             if (mem.MemPoint > 1000)
                             {
-                                var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish==0);
+                                var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish==0 & LotteryTicket._.LeBet == 1);
                                 //查询是否已投注
                                 if (ticket == null)
                                 {
-                                    var l = LotteryTicket.Find(LotteryTicket._.LeFinish == 0);
+                                    var l = LotteryTicket.Find(LotteryTicket._.LeFinish == 0 & LotteryTicket._.LeBet == 1);
                                     if (l != null)
                                     {
                                         var point = mem.MemPoint;
                                         mem.MemPoint = point - 1000;
                                         mem.MemLotteryId = l.LeId;
-                                        mem.MemLottery = command.Target + "|" + command.Params;
+                                        mem.MemLottery = command.Target + "*" + command.Params;
                                         mem.Update();
                                         await sendGroupAsync(messageReceiver, $"已投注，请牢记兑换码{l.LeSn}!", false);
                                     }
                                     else
                                     {
-                                        await sendGroupAsync(messageReceiver, $"没有正在进行的大乐透活动");
+                                        await sendGroupAsync(messageReceiver, $"大乐透已停止投注");
                                     }
                                 }
                                 else
@@ -241,41 +244,64 @@ namespace BOT.Handler
                 {
                     if (command.Target.Length== 4 && command.Target != "")
                     {
-                        var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish == 1);
+                        var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish == 0);
                         //查询是否已投注
                         if (ticket != null)
                         {
-                            var rednum = mem.MemLottery.Split("|")[0].ToArray();
-                            var bluenum = mem.MemLottery.Split("|")[0].ToArray();
-                            var tnum = ticket.LeResult.ToArray();
-                            int Acount = 0;
-                            int Bcount = 0;
-                            for (int k = 0; k < 7; k++)
+                            if(mem.MemLottery!="0")
                             {
-                                if (tnum[k] == rednum[k])
+                                if (ticket.LeOpen == 1)
                                 {
-                                    Acount++;
+                                    try
+                                    {
+                                        var rednum = mem.MemLottery.Split("*")[0].ToArray();
+                                        var bluenum = mem.MemLottery.Split("*")[1].ToArray();
+                                        var tnum = ticket.LeResult.ToList();
+                                        var trnum = tnum.GetRange(0, 7);
+                                        var tbnum = tnum.GetRange(7, 3);
+                                        int Acount = 0;
+                                        int Bcount = 0;
+                                        for (int k = 0; k < 7; k++)
+                                        {
+                                            if (trnum[k] == rednum[k])
+                                            {
+                                                Acount++;
+                                            }
+                                        }
+                                        for (int k = 0; k < 3; k++)
+                                        {
+                                            if (tbnum[k] == bluenum[k])
+                                            {
+                                                Bcount++;
+                                            }
+                                        }
+                                        var getRed = UtilHelper.ToPoint(Acount, true);
+                                        var getBlue = UtilHelper.ToPoint(Bcount, false);
+
+                                        var point = int.Parse(getRed) * int.Parse(getBlue);
+                                        var pp = mem.MemPoint;
+                                        mem.MemPoint = pp + point;
+                                        mem.MemLottery = "0";
+                                        mem.Update();
+
+                                        await sendGroupAsync(messageReceiver, $"你中了{Acount}个红球和{Bcount}个蓝球，您的本次奖金一共是{point}积分!\n" +
+                                            $"积分已转入您的账户中,当前余额【{mem.MemPoint}】");
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        Console.WriteLine(e.Message);
+                                    }
+                                }
+                                else
+                                {
+                                    await sendGroupAsync(messageReceiver, $"错误，还未开奖!");
                                 }
                             }
-                            for (int k = 0; k < 3; k++)
+                            else
                             {
-                                if (tnum[k] == bluenum[k])
-                                {
-                                    Bcount++;
-                                }
+                                await sendGroupAsync(messageReceiver, $"错误，您已兑奖!");
                             }
-                            var getRed = UtilHelper.ToPoint(Acount);
-                            var getBlue = UtilHelper.ToPoint(Bcount);
-
-                            var point = int.Parse(getRed) * int.Parse(getBlue);
-                            var pp = mem.MemPoint;
-                            mem.MemPoint = pp + point;
-                            mem.MemLotteryId = "";
-                            mem.MemLottery = "";
-                            mem.Update();
-
-                            await sendGroupAsync(messageReceiver, $"恭喜您!你的中了{Acount}个红球和{Bcount}个蓝球，您的本次奖金一共是{point}积分!\n" +
-                                $"积分已转入您的账户中,当前余额【{mem.MemPoint}】");
+                           
                         }
                         else
                         {
@@ -333,13 +359,13 @@ namespace BOT.Handler
 
         private static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg)
         {
-            TimeConsumingCounter tcc = new TimeConsumingCounter();
-            tcc.Start();
-            await receiver.SendGroupMessage($"".Append(msg)).ContinueWith((e)=> {
-                tcc.Over();
-                Console.WriteLine("发送耗时" + tcc.Span());
-            });
-          
+         
+            SendGroupMessageModule.Executed(receiver.Sender.Group.Id,msg);
+            //await receiver.SendGroupMessage($"".Append(msg)).ContinueWith((e)=> {
+            //    tcc.Over();
+            //    Console.WriteLine("发送耗时" + tcc.Span());
+            //});
+
         }
         private static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg,bool atMsgPosition)
         {

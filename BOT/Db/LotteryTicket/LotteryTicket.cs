@@ -41,6 +41,22 @@ namespace Db.Bot
         [BindColumn("le_sn", "大乐透兑换码", "varchar(255)")]
         public String LeSn { get => _LeSn; set { if (OnPropertyChanging("LeSn", value)) { _LeSn = value; OnPropertyChanged("LeSn"); } } }
 
+        private Int32 _LeBet;
+        /// <summary>大乐透能否投注</summary>
+        [DisplayName("大乐透能否投注")]
+        [Description("大乐透能否投注")]
+        [DataObjectField(false, false, false, 255)]
+        [BindColumn("le_bet", "大乐透能否投注", "int(255)")]
+        public Int32 LeBet { get => _LeBet; set { if (OnPropertyChanging("LeBet", value)) { _LeBet = value; OnPropertyChanged("LeBet"); } } }
+
+        private Int32 _LeOpen;
+        /// <summary>大乐透是否开奖</summary>
+        [DisplayName("大乐透是否开奖")]
+        [Description("大乐透是否开奖")]
+        [DataObjectField(false, false, false, 255)]
+        [BindColumn("le_open", "大乐透是否开奖", "int(255)")]
+        public Int32 LeOpen { get => _LeOpen; set { if (OnPropertyChanging("LeOpen", value)) { _LeOpen = value; OnPropertyChanged("LeOpen"); } } }
+
         private Int32 _LeFinish;
         /// <summary>大乐透是否结束</summary>
         [DisplayName("大乐透是否结束")]
@@ -71,6 +87,8 @@ namespace Db.Bot
                     case "LeIdx": return _LeIdx;
                     case "LeId": return _LeId;
                     case "LeSn": return _LeSn;
+                    case "LeBet": return _LeBet;
+                    case "LeOpen": return _LeOpen;
                     case "LeFinish": return _LeFinish;
                     case "LeResult": return _LeResult;
                     default: return base[name];
@@ -83,6 +101,8 @@ namespace Db.Bot
                     case "LeIdx": _LeIdx = value.ToInt(); break;
                     case "LeId": _LeId = Convert.ToString(value); break;
                     case "LeSn": _LeSn = Convert.ToString(value); break;
+                    case "LeBet": _LeBet = value.ToInt(); break;
+                    case "LeOpen": _LeOpen = value.ToInt(); break;
                     case "LeFinish": _LeFinish = value.ToInt(); break;
                     case "LeResult": _LeResult = Convert.ToString(value); break;
                     default: base[name] = value; break;
@@ -104,6 +124,12 @@ namespace Db.Bot
             /// <summary>大乐透兑换码</summary>
             public static readonly Field LeSn = FindByName("LeSn");
 
+            /// <summary>大乐透能否投注</summary>
+            public static readonly Field LeBet = FindByName("LeBet");
+
+            /// <summary>大乐透是否开奖</summary>
+            public static readonly Field LeOpen = FindByName("LeOpen");
+
             /// <summary>大乐透是否结束</summary>
             public static readonly Field LeFinish = FindByName("LeFinish");
 
@@ -124,6 +150,12 @@ namespace Db.Bot
 
             /// <summary>大乐透兑换码</summary>
             public const String LeSn = "LeSn";
+
+            /// <summary>大乐透能否投注</summary>
+            public const String LeBet = "LeBet";
+
+            /// <summary>大乐透是否开奖</summary>
+            public const String LeOpen = "LeOpen";
 
             /// <summary>大乐透是否结束</summary>
             public const String LeFinish = "LeFinish";

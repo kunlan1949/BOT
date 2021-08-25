@@ -1,4 +1,5 @@
-﻿using BOT.Model;
+﻿using BOT.Actions;
+using BOT.Model;
 using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages.Receivers;
@@ -18,9 +19,14 @@ namespace BOT.Module.Send
     {
         public static async void Executed(string group,string msg)
         {
+            TimeConsumingCounter tcc = new TimeConsumingCounter();
+            tcc.Start();
             await MiraiBotFactory.Bot
                 .GetManager<MessageManager>()
-                .SendGroupMessage(group, "".Append(msg));
+                .SendGroupMessage(group, "".Append(msg)).ContinueWith((e) => {
+                    tcc.Over();
+                    Console.WriteLine("发送耗时" + tcc.Span());
+                }); ;
         }
     }
 }

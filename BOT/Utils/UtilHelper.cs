@@ -50,11 +50,20 @@ namespace BOT.Utils
             return dto.ToUnixTimeSeconds();
         }
 
-        public static string ToPoint(int num)
+        public static string ToPoint(int num,bool pow)
         {
             int p = 1;
-            var addon = Math.Pow(10, num-1);
-            p = (int)(p * addon); 
+            var addon = 0;
+            if (pow)
+            {
+                addon = (int)Math.Pow(10, num - 1);
+                p = p * addon;
+            }
+            else
+            {
+                addon = num+1;
+                p = p * addon;
+            }
 
             return p.ToString();
         }

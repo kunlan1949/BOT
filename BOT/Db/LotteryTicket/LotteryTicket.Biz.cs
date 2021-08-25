@@ -33,7 +33,7 @@ namespace Db.Bot
         {
             // 累加字段，生成 Update xx Set Count=Count+1234 Where xxx
             //var df = Meta.Factory.AdditionalFields;
-            //df.Add(nameof(LeFinish));
+            //df.Add(nameof(LeBet));
 
             // 过滤器 UserModule、TimeModule、IPModule
         }
@@ -68,6 +68,8 @@ namespace Db.Bot
         //    entity.LeIdx = 0;
         //    entity.LeId = "abc";
         //    entity.LeSn = "abc";
+        //    entity.LeBet = 0;
+        //    entity.LeOpen = 0;
         //    entity.LeFinish = 0;
         //    entity.LeResult = "abc";
         //    entity.Insert();
