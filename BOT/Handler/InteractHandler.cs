@@ -156,7 +156,6 @@ namespace BOT.Handler
                     {
                         await sendGroupAsync(messageReceiver, $"对局不存在!请开新局再回复{command.CommandType} {command.Target}!");
                     }
-
                 }
                 #endregion
                 #region 取消
