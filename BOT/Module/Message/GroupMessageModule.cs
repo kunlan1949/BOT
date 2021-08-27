@@ -24,8 +24,8 @@ namespace BOT.Module
 {
     public class GroupMessageModule
     {
-        
-        public void Execute(MessageReceiverBase @base,MessageBase executeMessage)
+
+        public void Execute(MessageReceiverBase @base, MessageBase executeMessage)
         {
             if (@base is GroupMessageReceiver receiver)
             {
@@ -38,8 +38,9 @@ namespace BOT.Module
                     if (m.Result != null)
                     {
                         Console.WriteLine($"指令发送:【{m.Result.CommandType}】【{m.Result.Target}】【{m.Result.Params}】");
-                        if (m.Result.CommandType.Contains(CommandType.BOT) || m.Result.CommandType.Contains(CommandType.IGUSS) 
-                            || m.Result.CommandType.Contains(CommandType.CANCEL) || m.Result.CommandType.Contains(CommandType.LOTTERY) || m.Result.CommandType.Contains(CommandType.CASHPRIZE))
+                        if (m.Result.CommandType.Contains(CommandType.BOT) || m.Result.CommandType.Contains(CommandType.IGUSS)
+                            || m.Result.CommandType.Contains(CommandType.CANCEL) || m.Result.CommandType.Contains(CommandType.LOTTERY)
+                            || m.Result.CommandType.Contains(CommandType.CASHPRIZE) || m.Result.CommandType.Contains(CommandType.LUCKY))
                         {
                             var g = Groups.Find(Groups._.GrpId == receiver.Sender.Group.Id);
                             Console.WriteLine("互动模式");
@@ -48,13 +49,13 @@ namespace BOT.Module
                                 var member = Members.Find(Members._.MemQq == receiver.Sender.Id);
                                 if (member != null)
                                 {
-                                    InteractHandler.CommandAsync(member,g, m.Result, receiver, false);
+                                    InteractHandler.CommandAsync(member, g, m.Result, receiver, false);
                                 }
                                 else
                                 {
                                     InteractHandler.CommandAsync(null, g, m.Result, receiver, false);
                                 }
-                                
+
                             }
                             else
                             {
@@ -79,7 +80,8 @@ namespace BOT.Module
 
                     }
                     tcc.Over();
-                    Console.WriteLine("操作耗时"+tcc.Span());
+                    Console.WriteLine("操作耗时" + tcc.Span());
+
                 }
                 //await receiver.SendGroupMessage("Hello, World".Append());
             }

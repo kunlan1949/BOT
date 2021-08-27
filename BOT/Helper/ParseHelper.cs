@@ -62,6 +62,10 @@ namespace BOT.Helper
             {
                 commandType = CommandType.BOT;
             }
+            else if (c[0].Contains(CommandType.LUCKY))
+            {
+                commandType = CommandType.LUCKY;
+            }
             else if (c[0].Contains(CommandType.IGUSS))
             {
                 commandType = CommandType.IGUSS;

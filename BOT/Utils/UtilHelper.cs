@@ -67,6 +67,30 @@ namespace BOT.Utils
 
             return p.ToString();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static bool ISTODAY(string time)
+        {
+            var istoday = false;
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(double.Parse(time)).ToLocalTime();
+            
+
+            DateTime now = DateTime.Now;
+            DateTime next = DateTime.Now.AddDays(1);
+            DateTime today = new DateTime(now.Year, now.Month, now.Day);//当天的零时零分
+            DateTime nextday = new DateTime(next.Year, next.Month, next.Day);//次日的零时零分
+            if (dtDateTime > today)
+            {
+                if (dtDateTime < nextday)
+                {
+                    istoday = true;
+                }
+            }
+            return istoday;
+        }
     }
     
 }

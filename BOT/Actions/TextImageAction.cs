@@ -29,7 +29,6 @@ namespace BOT.Actions
             else
             {
                 font = new Font("Arial", fontSize, FontStyle.Regular);
-
             }
             //绘笔颜色
             SolidBrush brush = new SolidBrush(Color.Black);

@@ -1,4 +1,5 @@
 ﻿using BOT.Actions;
+using BOT.Handler.Func;
 using BOT.Model;
 using BOT.Model.Game;
 using BOT.Module.Send;
@@ -18,6 +19,7 @@ namespace BOT.Handler
 {
     class InteractHandler
     {
+        
         public static async Task<string> CommandAsync(Members mem,Groups g,CommandAttribute command, GroupMessageReceiver messageReceiver, bool exec)
         {
             var exist_m = false;
@@ -30,9 +32,10 @@ namespace BOT.Handler
                 exist_m = false;
             }
 
+            #region 存在注册成员
             if (exist_m)
             {
-                #region 存在注册成员
+                #region BOT
                 if (command.CommandType.Contains(CommandType.BOT))
                 {
                     if (command.Target.Contains(TargetType.GUSSNUM))
@@ -86,6 +89,7 @@ namespace BOT.Handler
                     }
 
                 }
+                #endregion
                 #region 我猜
                 else if (command.CommandType.Contains(CommandType.IGUSS))
                 {
@@ -97,7 +101,7 @@ namespace BOT.Handler
                             var count = game.GameCount - 1;
                             if (command.Target.Length == 4 && RegUtil.IsUint(command.Target))
                             {
-                              
+
                                 var gnum = command.Target.ToList();
                                 var ugnum = gnum.Distinct().ToList();
                                 var tnum = game.GameParams.ToList();
@@ -191,14 +195,14 @@ namespace BOT.Handler
                 #region 大乐透
                 else if (command.CommandType.Contains(CommandType.LOTTERY))
                 {
-                    
-                    if (command.Params!=null && command.Params!="" && RegUtil.IsUint(command.Params) && command.Target.Length == 7 && command.Params.Length == 3)
+
+                    if (command.Params != null && command.Params != "" && RegUtil.IsUint(command.Params) && command.Target.Length == 7 && command.Params.Length == 3)
                     {
                         if (RegUtil.IsUint(command.Target) && !g.GrpLottery.Contains("-1"))
                         {
                             if (mem.MemPoint > 1000)
                             {
-                                var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish==0 & LotteryTicket._.LeBet == 1);
+                                var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish == 0 & LotteryTicket._.LeBet == 1);
                                 //查询是否已投注
                                 if (ticket == null)
                                 {
@@ -221,7 +225,7 @@ namespace BOT.Handler
                                 {
                                     await sendGroupAsync(messageReceiver, $"您已经投注过了!");
                                 }
-                                
+
                             }
                             else
                             {
@@ -239,15 +243,16 @@ namespace BOT.Handler
                     }
                 }
                 #endregion
+                #region 兑奖
                 else if (command.CommandType.Contains(CommandType.CASHPRIZE))
                 {
-                    if (command.Target.Length== 4 && command.Target != "")
+                    if (command.Target.Length == 4 && command.Target != "")
                     {
                         var ticket = LotteryTicket.Find(LotteryTicket._.LeId == mem.MemLotteryId & LotteryTicket._.LeFinish == 0);
                         //查询是否已投注
                         if (ticket != null)
                         {
-                            if(mem.MemLottery!="0")
+                            if (mem.MemLottery != "0")
                             {
                                 if (ticket.LeOpen == 1)
                                 {
@@ -286,7 +291,7 @@ namespace BOT.Handler
                                         await sendGroupAsync(messageReceiver, $"你中了{Acount}个红球和{Bcount}个蓝球，您的本次奖金一共是{point}积分!\n" +
                                             $"积分已转入您的账户中,当前余额【{mem.MemPoint}】");
                                     }
-                                    catch(Exception e)
+                                    catch (Exception e)
                                     {
                                         Console.WriteLine(e.Message);
                                     }
@@ -300,7 +305,7 @@ namespace BOT.Handler
                             {
                                 await sendGroupAsync(messageReceiver, $"错误，您已兑奖!");
                             }
-                           
+
                         }
                         else
                         {
@@ -312,8 +317,13 @@ namespace BOT.Handler
                         await sendGroupAsync(messageReceiver, $"错误，请检查指令格式!");
                     }
                 }
-                    #endregion
+                #endregion
+                else if (command.CommandType.Contains(CommandType.LUCKY))
+                {
+                    await ConstellationHandler.execAsync(mem,g,command,messageReceiver);
+                }
             }
+            #endregion
             else
             {
                 if (command.CommandType.Contains(CommandType.BOT)){

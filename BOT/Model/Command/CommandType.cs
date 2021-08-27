@@ -31,6 +31,7 @@ namespace BOT.Model
         public static string CANCEL = "结束";
         public static string LOTTERY = "大乐透";
         public static string CASHPRIZE = "兑奖";
+        public static string LUCKY = "运势";
         ///增加复读关键字
         ///【/copyread [你好,早上好]】
         public static string CopyRead = "/copyread";
