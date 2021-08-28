@@ -66,7 +66,6 @@ namespace BOT.Module
                         else
                         {
                             Console.WriteLine("命令模式");
-
                         }
                     }
                     else
