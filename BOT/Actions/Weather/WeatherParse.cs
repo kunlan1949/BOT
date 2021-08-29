@@ -7,8 +7,6 @@ using BookServer.NodeParse.Weather.jsonmodel;
 using BookServer.NodeParse.Weather.jsonmodel.http;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
-using OpenQA.Selenium;
-using SharedLibrary.helper;
 
 namespace BookServer.NodeParse.Weather
 {
@@ -27,7 +25,7 @@ namespace BookServer.NodeParse.Weather
             htmlDoc.LoadHtml(html);
             return htmlDoc;
         }
-        public static async Task<WeatherModel> WeatherResultAsync(string url)
+        public static async Task<WeatherModel> WeatherResultAsync(string code)
         {
             ////*[@class='bgwhite_']/div/div[2]/div[3]/div[1]/div/div[6]
             //var htmlDocument = await doc($"http://www.nmc.cn/publish/forecast/" + $"{url}.html");
@@ -101,7 +99,7 @@ namespace BookServer.NodeParse.Weather
             //var weNode = statusDoc.Result.DocumentNode.SelectSingleNode(weParse);
             //var weather = weNode.InnerText;
 
-            string response = HttpApi.HttpGet("http://www.nmc.cn/rest/weather?stationid=59493");
+            string response = HttpApi.HttpGet("http://www.nmc.cn/rest/weather?stationid="+$"{code}");
             WeatherJsonModel w = JsonConvert.DeserializeObject<WeatherJsonModel>(response);
 
             var result = new WeatherModel

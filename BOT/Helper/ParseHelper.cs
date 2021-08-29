@@ -58,6 +58,10 @@ namespace BOT.Helper
             {
                 commandType = CommandType.CASHPRIZE;
             }
+            else if (c[0].Contains(CommandType.WEATHER))
+            {
+                commandType = CommandType.WEATHER;
+            }
             else if(c[0].Contains(CommandType.BOT))
             {
                 commandType = CommandType.BOT;

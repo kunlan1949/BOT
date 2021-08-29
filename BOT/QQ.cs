@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace BOT
 {
-    class TransientFaultHandlingOptions
+    class QQ
     {
-        public bool Enabled { get; set; }
-        public TimeSpan AutoRetryDelay { get; set; }
+        public string Number { get; set; }
+        public string VerifyKey { get; set; }
+        public string Address { get; set; }
     }
 }

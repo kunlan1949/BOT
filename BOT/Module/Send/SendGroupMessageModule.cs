@@ -30,6 +30,7 @@ namespace BOT.Module.Send
                 }); ;
         }
 
+
         public static async Task sendGroupAtAsync(GroupMessageReceiver receiver, string msg, bool atMsgPosition)
         {
             TimeConsumingCounter tcc = new TimeConsumingCounter();
@@ -37,6 +38,27 @@ namespace BOT.Module.Send
             if (atMsgPosition)
             {
                 await receiver.SendGroupMessage($"".Append(new AtMessage(receiver.Sender.Id)).Append(msg)).ContinueWith((e) => {
+                    tcc.Over();
+                    Console.WriteLine("发送耗时" + tcc.Span());
+                });
+            }
+            else
+            {
+                await receiver.SendGroupMessage($"".Append(msg).Append(new AtMessage(receiver.Sender.Id))).ContinueWith((e) => {
+                    tcc.Over();
+                    Console.WriteLine("发送耗时" + tcc.Span());
+                });
+            }
+
+        }
+
+        public static async Task sendGroupAtAsync(GroupMessageReceiver receiver, MessageBase[] msg, bool atMsgPosition)
+        {
+            TimeConsumingCounter tcc = new TimeConsumingCounter();
+            tcc.Start();
+            if (atMsgPosition)
+            {
+                await receiver.SendGroupMessage(msg).ContinueWith((e) => {
                     tcc.Over();
                     Console.WriteLine("发送耗时" + tcc.Span());
                 });

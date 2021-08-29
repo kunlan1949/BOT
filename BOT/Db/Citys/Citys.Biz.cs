@@ -26,14 +26,11 @@ using XCode.Membership;
 namespace Db.Bot
 {
     /// <summary></summary>
-    public partial class CityCodes : Entity<CityCodes>
+    public partial class Citys : Entity<Citys>
     {
         #region 对象操作
-        static CityCodes()
+        static Citys()
         {
-            // 累加字段，生成 Update xx Set Count=Count+1234 Where xxx
-            //var df = Meta.Factory.AdditionalFields;
-            //df.Add(nameof(CityCode));
 
             // 过滤器 UserModule、TimeModule、IPModule
         }
@@ -46,7 +43,10 @@ namespace Db.Bot
             if (!HasDirty) return;
 
             // 这里验证参数范围，建议抛出参数异常，指定参数名，前端用户界面可以捕获参数异常并聚焦到对应的参数输入框
-            if (CityName.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CityName), "城市名称不能为空！");
+            if (CityProvince.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CityProvince), "城市所属省份不能为空！");
+            if (CityName.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CityName), "城市名不能为空！");
+            if (CityUrl.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CityUrl), "城市对应url不能为空！");
+            if (CityCode.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CityCode), "城市代码不能为空！");
 
             // 建议先调用基类方法，基类方法会做一些统一处理
             base.Valid(isNew);
@@ -61,15 +61,17 @@ namespace Db.Bot
         //    // InitData一般用于当数据表没有数据时添加一些默认数据，该实体类的任何第一次数据库操作都会触发该方法，默认异步调用
         //    if (Meta.Session.Count > 0) return;
 
-        //    if (XTrace.Debug) XTrace.WriteLine("开始初始化CityCodes[CityCodes]数据……");
+        //    if (XTrace.Debug) XTrace.WriteLine("开始初始化Citys[Citys]数据……");
 
-        //    var entity = new CityCodes();
+        //    var entity = new Citys();
         //    entity.CityIdx = 0;
+        //    entity.CityProvince = "abc";
         //    entity.CityName = "abc";
-        //    entity.CityCode = 0;
+        //    entity.CityUrl = "abc";
+        //    entity.CityCode = "abc";
         //    entity.Insert();
 
-        //    if (XTrace.Debug) XTrace.WriteLine("完成初始化CityCodes[CityCodes]数据！");
+        //    if (XTrace.Debug) XTrace.WriteLine("完成初始化Citys[Citys]数据！");
         //}
 
         ///// <summary>已重载。基类先调用Valid(true)验证数据，然后在事务保护内调用OnInsert</summary>
@@ -94,7 +96,7 @@ namespace Db.Bot
         /// <summary>根据自增查找</summary>
         /// <param name="cityIdx">自增</param>
         /// <returns>实体对象</returns>
-        public static CityCodes FindByCityIdx(Int32 cityIdx)
+        public static Citys FindByCityIdx(Int32 cityIdx)
         {
             if (cityIdx <= 0) return null;
 
@@ -110,8 +112,8 @@ namespace Db.Bot
 
         #region 高级查询
 
-        // Select Count(CityIdx) as CityIdx,Category From city_codes Where CreateTime>'2020-01-24 00:00:00' Group By Category Order By CityIdx Desc limit 20
-        //static readonly FieldCache<CityCodes> _CategoryCache = new FieldCache<CityCodes>(nameof(Category))
+        // Select Count(CityIdx) as CityIdx,Category From citys Where CreateTime>'2020-01-24 00:00:00' Group By Category Order By CityIdx Desc limit 20
+        //static readonly FieldCache<Citys> _CategoryCache = new FieldCache<Citys>(nameof(Category))
         //{
         //Where = _.CreateTime > DateTime.Today.AddDays(-30) & Expression.Empty
         //};

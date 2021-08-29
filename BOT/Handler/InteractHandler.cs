@@ -322,6 +322,10 @@ namespace BOT.Handler
                 {
                     await ConstellationHandler.execAsync(mem,g,command,messageReceiver);
                 }
+                else if (command.CommandType.Contains(CommandType.WEATHER))
+                {
+                    await WeatherHandler.execAsync(mem, g, command, messageReceiver);
+                }
             }
             #endregion
             else

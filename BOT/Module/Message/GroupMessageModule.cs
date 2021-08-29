@@ -40,7 +40,8 @@ namespace BOT.Module
                         Console.WriteLine($"指令发送:【{m.Result.CommandType}】【{m.Result.Target}】【{m.Result.Params}】");
                         if (m.Result.CommandType.Contains(CommandType.BOT) || m.Result.CommandType.Contains(CommandType.IGUSS)
                             || m.Result.CommandType.Contains(CommandType.CANCEL) || m.Result.CommandType.Contains(CommandType.LOTTERY)
-                            || m.Result.CommandType.Contains(CommandType.CASHPRIZE) || m.Result.CommandType.Contains(CommandType.LUCKY))
+                            || m.Result.CommandType.Contains(CommandType.CASHPRIZE) || m.Result.CommandType.Contains(CommandType.LUCKY) 
+                            || m.Result.CommandType.Contains(CommandType.WEATHER))
                         {
                             var g = Groups.Find(Groups._.GrpId == receiver.Sender.Group.Id);
                             Console.WriteLine("互动模式");

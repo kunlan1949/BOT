@@ -27,6 +27,7 @@ namespace BOT.Model
 
 
         //通用关键字
+        public static string WEATHER = "天气";
         public static string IGUSS = "我猜";
         public static string CANCEL = "结束";
         public static string LOTTERY = "大乐透";
