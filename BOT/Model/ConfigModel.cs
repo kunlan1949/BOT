@@ -9,24 +9,19 @@ namespace SharedLibrary.Model
     public class ConfigModel
     {
         /// <summary>
-        /// 数据库IP
+        /// QQ
         /// </summary>
-        public string DataBaseIp { get; set; }
+        public string Number { get; set; }
 
         /// <summary>
-        /// 数据库端口
+        /// 校验码
         /// </summary>
-        public string DataBasePort{ get; set; }
+        public string VerifyKey { get; set; }
 
         /// <summary>
-        /// 数据库用户名
+        /// 地址
         /// </summary>
-        public string DataBaseUid { get; set; }
-
-        /// <summary>
-        /// 数据库密码
-        /// </summary>
-        public string DataBasePwd { get; set; }
+        public string Address { get; set; }
 
     }
 }

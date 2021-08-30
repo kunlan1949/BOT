@@ -41,7 +41,7 @@ namespace BOT.Module
                         if (m.Result.CommandType.Contains(CommandType.BOT) || m.Result.CommandType.Contains(CommandType.IGUSS)
                             || m.Result.CommandType.Contains(CommandType.CANCEL) || m.Result.CommandType.Contains(CommandType.LOTTERY)
                             || m.Result.CommandType.Contains(CommandType.CASHPRIZE) || m.Result.CommandType.Contains(CommandType.LUCKY) 
-                            || m.Result.CommandType.Contains(CommandType.WEATHER))
+                            || m.Result.CommandType.Contains(CommandType.WEATHER) || m.Result.CommandType.Contains(CommandType.TWENTYONE))
                         {
                             var g = Groups.Find(Groups._.GrpId == receiver.Sender.Group.Id);
                             Console.WriteLine("互动模式");

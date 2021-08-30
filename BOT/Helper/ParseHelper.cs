@@ -74,6 +74,10 @@ namespace BOT.Helper
             {
                 commandType = CommandType.IGUSS;
             }
+            else if (c[0].Contains(CommandType.TWENTYONE))
+            {
+                commandType = CommandType.TWENTYONE;
+            }
             else if (c[0].Contains(CommandType.CANCEL))
             {
                 commandType = CommandType.CANCEL;

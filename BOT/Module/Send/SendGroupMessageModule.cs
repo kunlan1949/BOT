@@ -30,6 +30,15 @@ namespace BOT.Module.Send
                 }); ;
         }
 
+        public static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg)
+        {
+            TimeConsumingCounter tcc = new TimeConsumingCounter();
+            tcc.Start();
+            await receiver.SendGroupMessage($"".Append(msg)).ContinueWith((e) => {
+                tcc.Over();
+                Console.WriteLine("发送耗时" + tcc.Span());
+            });
+        }
 
         public static async Task sendGroupAtAsync(GroupMessageReceiver receiver, string msg, bool atMsgPosition)
         {

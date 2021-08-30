@@ -103,8 +103,12 @@ namespace BOT.Handler
                             {
 
                                 var gnum = command.Target.ToList();
-                                var ugnum = gnum.Distinct().ToList();
+                                var gcnum = new List<char>();
+                               
+                               
                                 var tnum = game.GameParams.ToList();
+                                var utnum = tnum.Distinct().ToList();
+
                                 int Acount = 0;
                                 int Bcount = 0;
                                 for (int k = 0; k < 4; k++)
@@ -115,12 +119,17 @@ namespace BOT.Handler
                                     }
                                     else
                                     {
-                                        for (int m = 0; m < ugnum.Count; m++)
+                                        gcnum.Add(gnum[k]);
+                                    }
+                                }
+                                var ugnum = gcnum.Distinct().ToList();
+                                for (int j = 0; j < utnum.Count; j++)
+                                {
+                                    for (int m = 0; m < ugnum.Count; m++)
+                                    {
+                                        if (utnum[j] == ugnum[m])//比较这两个数组相应的值是否相等
                                         {
-                                            if (tnum[k] == ugnum[m])//比较这两个数组相应的值是否相等
-                                            {
-                                                Bcount++;
-                                            }
+                                            Bcount++;
                                         }
                                     }
                                 }
@@ -317,14 +326,18 @@ namespace BOT.Handler
                         await sendGroupAsync(messageReceiver, $"错误，请检查指令格式!");
                     }
                 }
-                #endregion
+                #endregion 
+                else if (command.CommandType.Contains(CommandType.WEATHER))
+                {
+                    await WeatherHandler.execAsync(mem, g, command, messageReceiver);
+                }
                 else if (command.CommandType.Contains(CommandType.LUCKY))
                 {
                     await ConstellationHandler.execAsync(mem,g,command,messageReceiver);
                 }
-                else if (command.CommandType.Contains(CommandType.WEATHER))
+                else if (command.CommandType.Contains(CommandType.TWENTYONE))
                 {
-                    await WeatherHandler.execAsync(mem, g, command, messageReceiver);
+                    await TwentyOneHandler.startAsync(mem, g, command, messageReceiver);
                 }
             }
             #endregion

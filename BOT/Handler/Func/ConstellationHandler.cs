@@ -43,6 +43,7 @@ namespace BOT.Handler.Func
                     await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, result, true);
                     c.LuckResult = result;
                     c.UpdateTime = UtilHelper.GetUTCTimeUnix().ToString();
+                    c.Update();
                 }
             }
             else

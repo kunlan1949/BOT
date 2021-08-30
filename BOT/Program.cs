@@ -29,6 +29,64 @@ namespace BOT
 
             using IHost host = CreateHostBuilder(args).Build();
             
+            var cc=ConfigHelper.GetInfo();
+
+            Console.WriteLine($"Number={cc.Number}");
+            Console.WriteLine($"VerifyKey={cc.VerifyKey}");
+
+
+
+            using var bot = new MiraiBot
+            {
+                Address = cc.Address,
+                QQ = long.Parse(cc.Number),
+                VerifyKey = cc.VerifyKey
+            };
+
+            await bot.Launch().ContinueWith((e) => {
+                Console.WriteLine("启动成功");
+
+            });
+
+            //var modules = CommandUtilities
+            //    .LoadCommandModules("BOT.Module")
+            //    .ExcludeDisabledModules()
+            //    .ToList();
+            var groupMsg = new GroupMessageModule();
+            var friendMsg = new FriendMessageModule();
+            ///消息处理
+            ///
+            ///好友消息
+            bot.MessageReceived
+               .WhereAndCast<FriendMessageReceiver>()
+               .Subscribe(x =>
+               {
+                   friendMsg.Execute(x, x.MessageChain.First());
+               });
+
+            ///群聊消息
+            bot.MessageReceived
+                .WhereAndCast<GroupMessageReceiver>()
+                .Subscribe(x =>
+                {
+                    groupMsg.Execute(x, x.MessageChain.First());
+                });
+
+            ///事件处理
+            ///
+            ///加好友请求
+            bot.EventReceived.Where(x => x.Type == Events.NewFriendRequested)
+            .Cast<NewFriendRequestedEvent>().Subscribe(x =>
+            {
+
+            });
+
+            ///被邀请入群申请
+            bot.EventReceived.Where(x => x.Type == Events.NewInvitationRequested)
+            .Cast<NewInvitationRequestedEvent>().Subscribe(x =>
+            {
+
+            });
 
             //TimerAction.LatteryOpen();
 
@@ -48,66 +106,7 @@ namespace BOT
 
                             IConfigurationRoot configurationRoot = configuration.Build();
 
-                            QQ qq = new();
-                            configurationRoot.GetSection(nameof(QQ))
-                                             .Bind(qq);
-
-                            Console.WriteLine($"Number={qq.Number}");
-                            Console.WriteLine($"VerifyKey={qq.VerifyKey}");
-
-
-
-                            using var bot = new MiraiBot
-                            {
-                                Address = qq.Address,
-                                QQ = long.Parse(qq.Number),
-                                VerifyKey = qq.VerifyKey
-                            };
-
-                            await bot.Launch().ContinueWith((e) => {
-                                Console.WriteLine("启动成功");
-
-                            });
-
-                            //var modules = CommandUtilities
-                            //    .LoadCommandModules("BOT.Module")
-                            //    .ExcludeDisabledModules()
-                            //    .ToList();
-                            var groupMsg = new GroupMessageModule();
-                            var friendMsg = new FriendMessageModule();
-                            ///消息处理
-                            ///
-                            ///好友消息
-                            bot.MessageReceived
-                               .WhereAndCast<FriendMessageReceiver>()
-                               .Subscribe(x =>
-                               {
-                                   friendMsg.Execute(x, x.MessageChain.First());
-                               });
-
-                            ///群聊消息
-                            bot.MessageReceived
-                                .WhereAndCast<GroupMessageReceiver>()
-                                .Subscribe(x =>
-                                {
-                                    groupMsg.Execute(x, x.MessageChain.First());
-                                });
-
-                            ///事件处理
-                            ///
-                            ///加好友请求
-                            bot.EventReceived.Where(x => x.Type == Events.NewFriendRequested)
-                            .Cast<NewFriendRequestedEvent>().Subscribe(x =>
-                            {
-
-                            });
-
-                            ///被邀请入群申请
-                            bot.EventReceived.Where(x => x.Type == Events.NewInvitationRequested)
-                            .Cast<NewInvitationRequestedEvent>().Subscribe(x =>
-                            {
-
-                            });
+                            
                         });
 
     }

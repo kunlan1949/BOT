@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.3.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="NewLife.XCode" Version="10.2.2021.809" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -28,6 +28,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MiraiNetLibrary\MiraiNetLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="setting.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
