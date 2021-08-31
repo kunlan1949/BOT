@@ -19,13 +19,13 @@ namespace BookServer.NodeParse.Weather
             return htmlDocument;
         }
 
-        private static async Task<HtmlDocument> doch(string html)
+        private static HtmlDocument doch(string html)
         {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
             return htmlDoc;
         }
-        public static async Task<WeatherModel> WeatherResultAsync(string code)
+        public static WeatherModel WeatherResult(string code)
         {
             ////*[@class='bgwhite_']/div/div[2]/div[3]/div[1]/div/div[6]
             //var htmlDocument = await doc($"http://www.nmc.cn/publish/forecast/" + $"{url}.html");
@@ -99,7 +99,7 @@ namespace BookServer.NodeParse.Weather
             //var weNode = statusDoc.Result.DocumentNode.SelectSingleNode(weParse);
             //var weather = weNode.InnerText;
 
-            string response = HttpApi.HttpGet("http://www.nmc.cn/rest/weather?stationid="+$"{code}");
+            string response = HttpApi.HttpGet("http://www.nmc.cn/rest/weather?stationid=" + $"{code}");
             WeatherJsonModel w = JsonConvert.DeserializeObject<WeatherJsonModel>(response);
 
             var result = new WeatherModel
@@ -111,8 +111,8 @@ namespace BookServer.NodeParse.Weather
                 RelativeHumidity = w.data.real.weather.humidity.ToString(),
                 AirQuality = w.data.air.aqi.ToString(),
                 Weather = w.data.real.weather.info,
-                wind = new Windy() { WindDirect = w.data.real.wind.direct, WindSpeed= w.data.real.wind.power}
-                
+                wind = new Windy() { WindDirect = w.data.real.wind.direct, WindSpeed = w.data.real.wind.power }
+
             };
 
             return result;

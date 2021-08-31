@@ -23,7 +23,7 @@ namespace BOT.Handler.Func
                 var city = Citys.Find(Citys._.CityName == command.Target);
                 if (city != null)
                 {
-                    var result = WeatherParse.WeatherResultAsync(city.CityCode).Result;
+                    var result = WeatherParse.WeatherResult(city.CityCode);
                     await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, $"更新时间[{result.CurrentTime}]\n".Append($"{city.CityName} 今天{result.Weather}\n当前气温 {result.CurrentTemp}℃\n体感温度 {result.RealFeelst}℃ \n空气质量为：【{WeatherUtil.AirQuality(result.AirQuality)}】{result.AirQuality}\n降雨量为 {result.Rain} mm\n{result.wind.WindDirect} ：{result.wind.WindSpeed}"), true);
                 }
                 else

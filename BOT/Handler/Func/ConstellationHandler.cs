@@ -63,8 +63,6 @@ namespace BOT.Handler.Func
                 nc.UpdateTime = UtilHelper.GetUTCTimeUnix().ToString();
                 nc.Insert();
             }
-        
-
         }
 
         private static int dic(string target)
@@ -81,7 +79,7 @@ namespace BOT.Handler.Func
             return value;
         }
 
-        private static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg)
+        private static void sendGroup(GroupMessageReceiver receiver, string msg)
         {
 
             SendGroupMessageModule.Executed(receiver.Sender.Group.Id, msg);

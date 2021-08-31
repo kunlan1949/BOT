@@ -9,7 +9,13 @@ namespace BOT.Model.Game
 {
     class TwentyOneModel
     {
-        public enum Color { HongTao,MeiHua, HeiTao, FangPian }//花色
+        public static List<int> value =new() { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1 };//点数
+       
+        public enum Color
+        {
+            Spade, Heart, Diamond, Club
+        }
+        
         public enum point { two, three, four, five, six, seven, eight, nine, ten, J, Q, K, A}//点数
     }
     class Poker //定义poker类
