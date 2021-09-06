@@ -29,7 +29,7 @@ namespace BOT.Model
 
                     foreach (var g in gl)
                     {
-                        SendGroupMessageModule.Executed(g.GrpId, $"大乐透开奖结果:【{resultList[0]}】【{resultList[1]}】【{resultList[2]}】【{resultList[3]}】 " +
+                        SendGroupMessageModule.PostMessageAsync(g.GrpId, $"大乐透开奖结果:【{resultList[0]}】【{resultList[1]}】【{resultList[2]}】【{resultList[3]}】 " +
                             $"【{resultList[4]}】【{resultList[5]}】【{resultList[6]}】*【{resultList[7]}】【{resultList[8]}】【{resultList[9]}】\n" +
                             "大家中奖了吗？快来领取你的大乐透奖励吧!");
                     }

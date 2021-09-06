@@ -8,8 +8,6 @@ using Db.Bot;
 using HtmlAgilityPack;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages.Receivers;
-using Mirai.Net.Utils.Extensions;
-using Mirai.Net.Utils.Extensions.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,15 +77,6 @@ namespace BOT.Handler.Func
             return value;
         }
 
-        private static void sendGroup(GroupMessageReceiver receiver, string msg)
-        {
-
-            SendGroupMessageModule.Executed(receiver.Sender.Group.Id, msg);
-            //await receiver.SendGroupMessage($"".Append(msg)).ContinueWith((e)=> {
-            //    tcc.Over();
-            //    Console.WriteLine("发送耗时" + tcc.Span());
-            //});
-
-        }
+        
     }
 }

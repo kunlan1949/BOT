@@ -1,15 +1,14 @@
 ﻿using BOT.Handler;
 using BOT.Helper;
 using BOT.Model;
+using BOT.Module.Send;
 using Db.Bot;
 using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages.Receivers;
 using Mirai.Net.Modules;
 using Mirai.Net.Sessions;
-using Mirai.Net.Sessions.Http.Concretes;
-using Mirai.Net.Utils.Extensions;
-using Mirai.Net.Utils.Extensions.Actions;
+using Mirai.Net.Utils.Scaffolds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace BOT.Module.Message
 {
-    class FriendMessageModule: IModule
+    class FriendMessageModule: ICommandModule
     {
         public bool? IsEnable { get; set; }
 
@@ -39,7 +38,7 @@ namespace BOT.Module.Message
                         var f = ParseHelper.FriendCommandAsync(message.Text, receiver);
                         if (f.IsCompletedSuccessfully)
                         {
-                            f.ContinueWith((m) => {
+                            f.ContinueWith(async (m) => {
                                 if (m.Result != null)
                                 {
                                     Console.WriteLine($"指令发送:【{m.Result.CommandType}】【{m.Result.Target}】【{m.Result.Params}】");
@@ -56,7 +55,7 @@ namespace BOT.Module.Message
                                                     Target = mission.MTarget,
                                                     Params = mission.MParam
                                                 };
-                                                CommandHandler.friendCommandAsync(command, receiver, true);
+                                                await CommandHandler.friendCommandAsync(command, receiver, true);
                                             }
                                             else
                                             {
@@ -65,7 +64,7 @@ namespace BOT.Module.Message
                                         }
                                         else
                                         {
-                                            receiver.SendFriendMessage("".Append(
+                                            await SendFriendMessageModule.sendFriendAsync(receiver,"".Append(
                                             $"您有尚未解决的操作{mission.MType + " " + mission.MTarget + " " + mission.MParam}\n" +
                                             $"此操作需要您确认/yn 1 或者/yn 0"));
                                         }
@@ -73,7 +72,7 @@ namespace BOT.Module.Message
                                     }
                                     else
                                     {
-                                        CommandHandler.friendCommandAsync(m.Result, receiver, false);
+                                        await CommandHandler.friendCommandAsync(m.Result, receiver, false);
                                     }
                                 }
                                 else

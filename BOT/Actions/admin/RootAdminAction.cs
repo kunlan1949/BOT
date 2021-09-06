@@ -1,10 +1,11 @@
 ﻿using BOT.Model;
+using BOT.Module.Send;
 using BOT.Utils;
 using Db.Bot;
+using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Messages.Receivers;
-using Mirai.Net.Sessions.Http.Concretes;
-using Mirai.Net.Utils.Extensions;
-using Mirai.Net.Utils.Extensions.Actions;
+using Mirai.Net.Sessions.Http.Managers;
+using Mirai.Net.Utils.Scaffolds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,7 @@ namespace BOT.Actions
                         var root = RootAdmin.Find(RootAdmin._.AdminQq == command.Params);
                         if (root == null)
                         {
-                            AccountManager account = new();
-                            var a = await account.GetFriendProfile(command.Params);
+                            var a = await AccountManager.GetFriendProfileAsync(command.Params);
                             var r = new RootAdmin();
                             r.AdminId = "0";
                             r.AdminQq = command.Params;
@@ -35,12 +35,12 @@ namespace BOT.Actions
                             r.AdminCreateTime = UtilHelper.GetTimeUnix().ToString();
                             r.Insert();
                           
-                            await messageReceiver.SendFriendMessage("".Append(
+                            await sendAsync(messageReceiver, "".Append(
                            $"已成功添加根管理员：{command.Params}\n"));
                         }
                         else
                         {
-                            await messageReceiver.SendFriendMessage("".Append(
+                            await sendAsync(messageReceiver, "".Append(
                            $"已存在根管理员：{command.Params}，添加失败\n"));
                         }
 
@@ -57,7 +57,7 @@ namespace BOT.Actions
                         m.MParam = command.Params;
                         m.MFinish = "0";
                         m.Insert();
-                        await messageReceiver.SendFriendMessage("".Append(
+                        await sendAsync(messageReceiver, "".Append(
                             $"是否确认要增加管理员：{command.Params}?\n" +
                             $"确认操作输入/y,取消操作输入/n "));
                     }
@@ -85,20 +85,20 @@ namespace BOT.Actions
                         var root = RootAdmin.Find(RootAdmin._.AdminQq == command.Params);
                         if (root == null)
                         {
-                            await messageReceiver.SendFriendMessage("".Append(
+                            await sendAsync(messageReceiver, "".Append(
                           $"不存在根管理员：{command.Params}，删除失败\n"));
                         }
                         else
                         {
                             if (root.AdminQq.Contains("2048437217"))
                             {
-                                await messageReceiver.SendFriendMessage("".Append(
+                                await sendAsync(messageReceiver, "".Append(
                            $"此根管理员：{command.Params}收到保护，无法删除！\n"));
                             }
                             else
                             {
                                 root.Delete();
-                                await messageReceiver.SendFriendMessage("".Append(
+                                await sendAsync(messageReceiver,"".Append(
                          $"已成功删除根管理员：{command.Params}\n"));
                             }
                             
@@ -118,7 +118,7 @@ namespace BOT.Actions
                         m.MParam = command.Params;
                         m.MFinish = "0";
                         m.Insert();
-                        await messageReceiver.SendFriendMessage("".Append(
+                        await sendAsync(messageReceiver,"".Append(
                             $"是否确认要删除根管理员：{command.Params}?\n" +
                             $"确认操作输入/y,取消操作输入/n "));
                     }
@@ -135,14 +135,22 @@ namespace BOT.Actions
             }
         }
 
+        private static async Task sendAsync(FriendMessageReceiver receiver, string msg)
+        {
+            await SendFriendMessageModule.sendFriendAsync(receiver,msg);
+        }
+        private static async Task sendAsync(FriendMessageReceiver receiver, MessageBase[] msg)
+        {
+            await SendFriendMessageModule.sendFriendAsync(receiver, msg);
+        }
 
         private static async Task errorAsync(FriendMessageReceiver receiver, string errmsg)
         {
-            await receiver.SendFriendMessage($"".Append(errmsg));
+            await sendAsync(receiver,$"".Append(errmsg));
         }
         private static async Task errorAsync(FriendMessageReceiver receiver, CommandAttribute command)
         {
-            await receiver.SendFriendMessage($"".Append($"未找到相关指令{command.CommandType}" + " " + $"{command.Target}" + " " + $"{command.Params}"));
+            await sendAsync(receiver,$"".Append($"未找到相关指令{command.CommandType}" + " " + $"{command.Target}" + " " + $"{command.Params}"));
         }
     }
 }

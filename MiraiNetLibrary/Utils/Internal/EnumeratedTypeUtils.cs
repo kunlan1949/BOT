@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace Mirai.Net.Utils.Extensions
+namespace Mirai.Net.Utils.Internal
 {
-    internal static class EnumeratedTypeExtensions
+    public static class EnumeratedTypeUtils
     {
         /// <summary>
         ///     获取某枚举值的Description attribute值，如果没有这个特性则直接返回该值的ToString
@@ -20,7 +20,9 @@ namespace Mirai.Net.Utils.Extensions
                 .GetType()
                 .GetField(t.ToString())
                 .GetCustomAttributes(typeof(DescriptionAttribute), false) is DescriptionAttribute[]
-                {Length: > 0} attributes
+            {
+                Length: > 0
+            } attributes
                 ? attributes.First().Description
                 : t.ToString();
         }

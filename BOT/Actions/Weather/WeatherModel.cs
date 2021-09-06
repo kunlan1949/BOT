@@ -45,7 +45,7 @@ namespace BookServer.NodeParse.Weather
         /// <summary>
         /// 风
         /// </summary>
-        public Windy wind { get; set; }
+        public Windy Wind { get; set; }
 
         /// <summary>
         /// 空气质量

@@ -8,6 +8,6 @@ namespace BOT.Actions.game
 {
     class TwentyAction
     {
-        public staitc 
+        //public staitc 
     }
 }

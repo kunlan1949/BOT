@@ -1,10 +1,11 @@
 ﻿using BOT.Model;
+using BOT.Module.Send;
 using BOT.Utils;
 using Db.Bot;
+using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Messages.Receivers;
-using Mirai.Net.Sessions.Http.Concretes;
-using Mirai.Net.Utils.Extensions;
-using Mirai.Net.Utils.Extensions.Actions;
+using Mirai.Net.Sessions.Http.Managers;
+using Mirai.Net.Utils.Scaffolds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,7 @@ namespace BOT.Actions
                             if (root == null)
                             {
 
-                                AccountManager account = new();
-                                var a = await account.GetFriendProfile(command.Target);
+                                var a = await AccountManager.GetFriendProfileAsync(command.Target);
                                 var r = new TAdmin();
                                 r.AdminId = command.Target;
                                 r.AdminIdentify = "";
@@ -40,12 +40,12 @@ namespace BOT.Actions
                                 r.AdminProtect = "0";
                                 r.Insert();
 
-                                await messageReceiver.SendFriendMessage("".Append(
+                                await sendAsync(messageReceiver,"".Append(
                                $"已成功添加管理员：{command.Target}\n"));
                             }
                             else
                             {
-                                await messageReceiver.SendFriendMessage("".Append(
+                                await sendAsync(messageReceiver,"".Append(
                                $"已存在管理员：{command.Params}，添加失败\n"));
                             }
 
@@ -62,7 +62,7 @@ namespace BOT.Actions
                             m.MParam = command.Params;
                             m.MFinish = "0";
                             m.Insert();
-                            await messageReceiver.SendFriendMessage("".Append(
+                            await sendAsync(messageReceiver,"".Append(
                                 $"是否确认要增加管理员：{command.Target}?\n" +
                                 $"确认操作输入/y,取消操作输入/n "));
                         }
@@ -93,7 +93,7 @@ namespace BOT.Actions
                     var root = TAdmin.Find(TAdmin._.AdminId == command.Target);
                     if (root == null)
                     {
-                        await messageReceiver.SendFriendMessage("".Append(
+                        await sendAsync(messageReceiver,"".Append(
                     $"不存在管理员：{command.Params}，删除失败\n"));
                     }
                     else
@@ -113,14 +113,14 @@ namespace BOT.Actions
 
                         if (isProtect)
                         {
-                            await messageReceiver.SendFriendMessage("".Append(
+                            await sendAsync(messageReceiver,"".Append(
                             $"此管理员：{command.Target}收到保护，无法删除！\n"));
 
                         }
                         else
                         {
                             root.Delete();
-                            await messageReceiver.SendFriendMessage("".Append(
+                            await sendAsync(messageReceiver,"".Append(
                         $"已成功删除管理员：{command.Target}\n"));
                         }
                                 
@@ -142,7 +142,7 @@ namespace BOT.Actions
                     }
                     m.MFinish = "0";
                     m.Insert();
-                    await messageReceiver.SendFriendMessage("".Append(
+                    await sendAsync(messageReceiver,"".Append(
                         $"是否确认要删除管理员：{command.Target}?\n" +
                         $"确认操作输入/y,取消操作输入/n "));
                 }
@@ -157,13 +157,22 @@ namespace BOT.Actions
         }
 
 
+        private static async Task sendAsync(FriendMessageReceiver receiver, string msg)
+        {
+            await SendFriendMessageModule.sendFriendAsync(receiver, msg);
+        }
+        private static async Task sendAsync(FriendMessageReceiver receiver, MessageBase[] msg)
+        {
+            await SendFriendMessageModule.sendFriendAsync(receiver, msg);
+        }
+
         private static async Task errorAsync(FriendMessageReceiver receiver, string errmsg)
         {
-            await receiver.SendFriendMessage($"".Append(errmsg));
+            await sendAsync(receiver,$"".Append(errmsg));
         }
         private static async Task errorAsync(FriendMessageReceiver receiver, CommandAttribute command)
         {
-            await receiver.SendFriendMessage($"".Append($"未找到相关指令{command.CommandType}" + " " + $"{command.Target}" + " " + $"{command.Params}"));
+            await sendAsync(receiver, $"".Append($"未找到相关指令{command.CommandType}" + " " + $"{command.Target}" + " " + $"{command.Params}"));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Reactive.Linq;
@@ -6,104 +7,186 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using AHpx.Extensions.JsonExtensions;
 using AHpx.Extensions.StringExtensions;
-using AHpx.Extensions.Utils;
+using Flurl;
 using Mirai.Net.Data.Events;
+using Mirai.Net.Data.Exceptions;
 using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Sessions;
 using Mirai.Net.Utils;
-using Mirai.Net.Utils.Extensions;
+using Mirai.Net.Utils.Internal;
 using Newtonsoft.Json;
 using Websocket.Client;
 
 namespace Mirai.Net.Sessions
 {
     /// <summary>
-    ///     Mirai机器人
+    /// mirai-api-http机器人描述
     /// </summary>
     public class MiraiBot : IDisposable
     {
-        #region Exposed
+        #region Properties
 
-        /// <param name="address">地址，比如localhost:8080</param>
-        /// <param name="verifyKey">验证密钥，Mirai.Net总是需要一个验证密钥</param>
-        /// <param name="qq">bot的qq号</param>
-        public MiraiBot(string address = null, string verifyKey = null, long qq = default)
+        /// <summary>
+        /// 最后一个启动的MiraiBot实例
+        /// </summary>
+        internal static MiraiBot Instance { get; set; }
+        
+        internal string HttpSessionKey { get; set; }
+
+        private string _address;
+        private string _qq;
+        private WebsocketClient _client;
+
+        /// <summary>
+        /// mirai-api-http本地服务器地址，比如：localhost:114514
+        /// <exception cref="InvalidAddressException">传入错误的地址将会抛出异常</exception>
+        /// </summary>
+        public string Address
         {
-            _address = address;
-            VerifyKey = verifyKey;
-            QQ = qq;
+            get => _address.TrimEnd('/').Empty("http://").Empty("https://");
+            set
+            {
+                if (!value.Contains(":")) throw new InvalidAddressException($"错误的地址: {value}");
+
+                var split = value.Split(':');
+
+                if (split.Length != 2) throw new InvalidAddressException($"错误的地址: {value}");
+                if (!split.Last().IsInteger()) throw new InvalidAddressException($"错误的地址: {value}");
+
+                _address = value;
+            }
         }
 
         /// <summary>
-        ///     启动bot对象
+        /// 建立连接的QQ账号
         /// </summary>
-        public async Task Launch()
+        public string QQ
         {
-            try
-            {
-                await LaunchHttpAdapter();
-                await LaunchWebsocketAdapter();
+            get => _qq;
+            set => _qq = value.IsIntegerOrThrow(new InvalidQQException("错误的QQ号"));
+        }
 
-                MiraiBotFactory.Bot = this;
-            }
-            catch (Exception e)
+        /// <summary>
+        /// Mirai.Net总是需要一个VerifyKey
+        /// </summary>
+        public string VerifyKey { get; set; }
+        
+        #endregion
+        
+        #region Exposed
+
+        public async Task LaunchAsync()
+        {
+            Instance = this;
+
+            await Task.WhenAll(Task.Run(async () =>
             {
-                throw new Exception($"启动失败: {e.Message}\n{this}", e);
-            }
+                await VerifyAsync();
+                await BindAsync();
+            }), StartWebsocketListenerAsync());
         }
 
         #endregion
 
-        #region Adapter launcher
+        #region Handlers
+
+        [JsonIgnore] public IObservable<EventBase> EventReceived => _eventReceivedSubject.AsObservable();
+
+        private readonly Subject<EventBase> _eventReceivedSubject = new();
+
+        [JsonIgnore] public IObservable<MessageReceiverBase> MessageReceived => _messageReceivedSubject.AsObservable();
+
+        private readonly Subject<MessageReceiverBase> _messageReceivedSubject = new();
+        
+        [JsonIgnore] public IObservable<string> UnknownMessageReceived => _unknownMessageReceived.AsObservable();
+
+        private readonly Subject<string> _unknownMessageReceived = new();
+
+        #endregion
+        
+        #region Http adapter private helpers
 
         /// <summary>
-        ///     认证http
+        /// 发送验证请求，获得未激活的session key
         /// </summary>
-        private async Task LaunchHttpAdapter()
+        /// <returns></returns>
+        private async Task VerifyAsync()
         {
-            await VerifyHttp();
-            await BindHttp();
+            var result = await HttpEndpoints.Verify.PostJsonAsync(new
+            {
+                verifyKey = VerifyKey
+            }, false);
+
+            HttpSessionKey = result.Fetch("session");
         }
 
-        private WebsocketClient _client;
+        /// <summary>
+        /// 激活session key
+        /// </summary>
+        private async Task BindAsync()
+        {
+            _ = await HttpEndpoints.Bind.PostJsonAsync(new
+            {
+                sessionKey = HttpSessionKey,
+                qq = QQ
+            }, false);
+        }
 
         /// <summary>
-        ///     启动websocket监听
+        /// 释放已激活的session
         /// </summary>
-        private async Task LaunchWebsocketAdapter()
+        private async Task ReleaseAsync()
         {
-            var url = this.GetUrl(WebsocketEndpoints.All);
+            _ = await HttpEndpoints.Release.PostJsonAsync(new
+            {
+                sessionKey = HttpSessionKey,
+                qq = QQ
+            }, false);
+        }
 
-            _client = new WebsocketClient(new Uri(url));
+        #endregion
 
-            _client
-                .MessageReceived
-                .Where(x => x.MessageType == WebSocketMessageType.Text)
+        #region Websocket adapter private helpers
+
+        /// <summary>
+        /// 启动websocket监听
+        /// </summary>
+        private async Task StartWebsocketListenerAsync()
+        {
+            var url = $"ws://{Address}/all"
+                .SetQueryParam("verifyKey", VerifyKey)
+                .SetQueryParam("qq", QQ)
+                .ToUri();
+
+            _client = new WebsocketClient(url);
+
+            _client.MessageReceived
+                .Where(message => message.MessageType == WebSocketMessageType.Text)
                 .Subscribe(message =>
                 {
-                    var type = message.GetNotificationType();
+                    var type = GetRespondMessageType(message);
                     var data = message.Text.Fetch("data");
-
+                    
                     switch (type)
                     {
-                        case WebsocketAdapterNotifications.Message:
-                            var messageBase = data.GetMessageReceiverBase();
+                        case WebsocketMessageTypes.Message:
+                            var receiver = GetMessageReceiverBase(data);
+
                             var messageChain = data
                                 .Fetch("messageChain")
                                 .ToJArray()
-                                .Select(token => token.ToString().GetMessageBase())
+                                .Select(token => GetMessageBase(token.ToString()))
                                 .ToList();
 
-                            messageBase.MessageChain = messageChain;
+                            receiver.MessageChain = messageChain;
 
-                            _messageReceivedSubject.OnNext(messageBase);
+                            _messageReceivedSubject.OnNext(receiver);
                             break;
-                        case WebsocketAdapterNotifications.Event:
-                            var eventBase = data.GetEventBase();
-                            _eventReceivedSubject.OnNext(eventBase);
+                        case WebsocketMessageTypes.Event:
+                            _eventReceivedSubject.OnNext(GetEventBase(data));
                             break;
-                        case WebsocketAdapterNotifications.Unknown:
-                            Console.WriteLine($"received unknown notification: {data}");
+                        case WebsocketMessageTypes.Unknown:
+                            _unknownMessageReceived.OnNext(data);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -113,127 +196,99 @@ namespace Mirai.Net.Sessions
             await _client.StartOrFail();
         }
 
-        #endregion
-
-        #region Property definitions
-
-        [JsonIgnore] public IObservable<EventBase> EventReceived => _eventReceivedSubject.AsObservable();
-
-        private readonly Subject<EventBase> _eventReceivedSubject = new();
-
-        [JsonIgnore] public IObservable<MessageReceiverBase> MessageReceived => _messageReceivedSubject.AsObservable();
-
-        private readonly Subject<MessageReceiverBase> _messageReceivedSubject = new();
-
         /// <summary>
-        ///     Mirai.Net总是需要一个VerifyKey
+        /// 获取websocket收到的消息是什么类型的
         /// </summary>
-        public string VerifyKey { get; set; }
-
-        /// <summary>
-        ///     新建连接 或 singleMode 模式下为空, 通过已有 sessionKey 连接时不可为空
-        /// </summary>
-        internal string HttpSessionKey { get; set; }
-
-        private string _address;
-
-        /// <summary>
-        ///     比如：localhost:114514
-        /// </summary>
-        public string Address
+        /// <param name="message"></param>
+        /// <returns>消息，事件，未知</returns>
+        private static WebsocketMessageTypes GetRespondMessageType(ResponseMessage message)
         {
-            get => _address.TrimEnd('/').Empty("http://").Empty("https://");
-            set
+            if (message.MessageType != WebSocketMessageType.Text || message.Text.IsNullOrEmpty())
+                return WebsocketMessageTypes.Unknown;
+
+            try
             {
-                if (!value.Contains(":")) throw new Exception($"错误的地址: {value}");
+                var json = message.Text.Fetch("data").ToJObject();
 
-                var split = value.Split(':');
+                if (!json.ContainsKey("type"))
+                    return WebsocketMessageTypes.Unknown;
 
-                if (split.Length != 2) throw new Exception($"错误的地址: {value}");
-                if (!split.Last().IsInteger()) throw new Exception($"错误的地址: {value}");
-
-                _address = value;
+                return json.Fetch("type").Contains("Message") 
+                    ? WebsocketMessageTypes.Message
+                    : WebsocketMessageTypes.Event;
+            }
+            catch
+            {
+                return WebsocketMessageTypes.Unknown;
             }
         }
 
         /// <summary>
-        ///     绑定的账号, singleMode 模式下为空, 非 singleMode 下新建连接不可为空
+        /// 默认消息接收器实例
         /// </summary>
-        public long QQ { get; set; }
-
-        #endregion
-
-        #region Http adapter
+        private static readonly IEnumerable<MessageReceiverBase> MessageReceiverBases = ReflectionUtils.GetDefaultInstances<MessageReceiverBase>(
+            "Mirai.Net.Data.Messages.Receivers");
+        
+        /// <summary>
+        /// 默认消息实例
+        /// </summary>
+        private static readonly IEnumerable<MessageBase> MessageBases =
+            ReflectionUtils.GetDefaultInstances<MessageBase>("Mirai.Net.Data.Messages.Concretes");
+        
+        /// <summary>
+        /// 默认事件实例
+        /// </summary>
+        private static readonly IEnumerable<EventBase> EventBases =
+            ReflectionUtils.GetDefaultInstances<EventBase>("Mirai.Net.Data.Events.Concretes");
 
         /// <summary>
-        ///     调用端点: /verify，返回一个新的session key
+        /// 根据json动态解析正确的消息接收器子类
         /// </summary>
-        /// <returns>返回sessionKey</returns>
-        private async Task VerifyHttp()
-        {
-            var url = this.GetUrl(HttpEndpoints.Verify);
-            var response = await HttpUtilities.PostJsonAsync(url, new
-            {
-                verifyKey = VerifyKey
-            }.ToJsonString());
-
-            this.EnsureSuccess(response);
-
-            var content = await response.FetchContent();
-
-            HttpSessionKey = content.Fetch("session");
-        }
-
-        /// <summary>
-        ///     调用端点：/bind，将当前对象的qq好绑定的指定的sessionKey
-        /// </summary>
-        private async Task BindHttp()
-        {
-            var url = this.GetUrl(HttpEndpoints.Bind);
-            var response = await HttpUtilities.PostJsonAsync(url, new
-            {
-                sessionKey = HttpSessionKey,
-                qq = QQ
-            }.ToJsonString());
-
-            this.EnsureSuccess(response);
-        }
-
-        /// <summary>
-        ///     调用端口：/release，释放bot的资源占用
-        /// </summary>
-        private async Task ReleaseHttp()
-        {
-            var url = this.GetUrl(HttpEndpoints.Release);
-            var response = await HttpUtilities.PostJsonAsync(url, new
-            {
-                sessionKey = HttpSessionKey,
-                qq = QQ
-            }.ToJsonString());
-
-            this.EnsureSuccess(response);
-        }
-
-        #endregion
-
-        #region Diagnose stuff
-
-        /// <summary>
-        ///     重写了默认的ToString方法，本质上是替代为ToJsonString
-        /// </summary>
+        /// <param name="data"></param>
         /// <returns></returns>
-        public override string ToString()
+        private static MessageReceiverBase GetMessageReceiverBase(string data)
         {
-            return this.ToJsonString();
+            var root = JsonConvert.DeserializeObject<MessageReceiverBase>(data);
+
+            return JsonConvert.DeserializeObject(data,
+                MessageReceiverBases.First(receiver => receiver.Type == root!.Type)
+                    .GetType()) as MessageReceiverBase;
         }
+        
+        /// <summary>
+        /// 根据json动态解析对应的消息子类
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private static MessageBase GetMessageBase(string data)
+        {
+            var root = JsonConvert.DeserializeObject<MessageBase>(data);
+
+            return JsonConvert.DeserializeObject(data,
+                MessageBases.First(message => message.Type == root!.Type)
+                    .GetType()) as MessageBase;
+        }
+
+        /// <summary>
+        /// 根据json动态解析对应的事件子类 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private static EventBase GetEventBase(string data)
+        {
+            var root = JsonConvert.DeserializeObject<EventBase>(data);
+
+            return JsonConvert.DeserializeObject(data,
+                EventBases.First(message => message.Type == root!.Type)
+                    .GetType()) as EventBase;
+        }
+
+        #endregion
 
         public async void Dispose()
         {
-            _client?.Dispose();
-            _eventReceivedSubject.OnCompleted();
-            await ReleaseHttp();
+            await ReleaseAsync();
+            _client.Dispose();
         }
-
-        #endregion
     }
 }

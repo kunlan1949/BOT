@@ -3,7 +3,6 @@ using Mirai.Net.Sessions;
 using Mirai.Net.Utils;
 using System;
 using System.Threading.Tasks;
-using Mirai.Net.Utils.Extensions;
 using System.Linq;
 using BOT.Helper;
 using BOT.Module;
@@ -13,9 +12,9 @@ using Mirai.Net.Data.Events;
 using BOT.Module.Message;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Mirai.Net.Sessions.Http.Concretes;
 using BOT.Action;
 using BOT.Utils;
+using Mirai.Net.Utils.Scaffolds;
 
 namespace BOT
 {
@@ -36,14 +35,14 @@ namespace BOT
 
 
 
-            using var bot = new MiraiBot
+            var bot = new MiraiBot
             {
                 Address = cc.Address,
-                QQ = long.Parse(cc.Number),
+                QQ = cc.Number,
                 VerifyKey = cc.VerifyKey
             };
 
-            await bot.Launch().ContinueWith((e) => {
+            await bot.LaunchAsync().ContinueWith((e) => {
                 Console.WriteLine("启动成功");
 
             });
@@ -67,9 +66,9 @@ namespace BOT
             ///群聊消息
             bot.MessageReceived
                 .WhereAndCast<GroupMessageReceiver>()
-                .Subscribe(x =>
+                .Subscribe(async x =>
                 {
-                    groupMsg.Execute(x, x.MessageChain.First());
+                    await groupMsg.ExecuteAsync(x, x.MessageChain.First());
                 });
 
             ///事件处理
@@ -94,7 +93,7 @@ namespace BOT
         }
         static IHostBuilder CreateHostBuilder(string[] args) =>
                     Host.CreateDefaultBuilder(args)
-                        .ConfigureAppConfiguration(async (hostingContext, configuration) =>
+                        .ConfigureAppConfiguration((hostingContext, configuration) =>
                         {
                             configuration.Sources.Clear();
 

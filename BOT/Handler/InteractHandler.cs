@@ -7,8 +7,7 @@ using BOT.Utils;
 using Db.Bot;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages.Receivers;
-using Mirai.Net.Utils.Extensions;
-using Mirai.Net.Utils.Extensions.Actions;
+using Mirai.Net.Utils.Scaffolds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,9 +86,25 @@ namespace BOT.Handler
                             await sendGroupAsync(messageReceiver, $"成员已注册！");
                         }
                     }
-
+                    else if (command.Target.Contains(TargetType.SIMAGE))
+                    {
+                        var image = messageReceiver.MessageChain.WhereAndCast<ImageMessage>();
+                        if (image != null)
+                        {
+                            if (image.Length > 0)
+                            {
+                                Console.WriteLine(image[0].Url);
+                            }
+                            else
+                            {
+                                await sendGroupAsync(messageReceiver,"请发送您想要查找的图片!",false);
+                            }
+                            
+                        }
+                    }
                 }
                 #endregion
+
                 #region 我猜
                 else if (command.CommandType.Contains(CommandType.IGUSS))
                 {
@@ -104,8 +119,8 @@ namespace BOT.Handler
 
                                 var gnum = command.Target.ToList();
                                 var gcnum = new List<char>();
-                               
-                               
+
+
                                 var tnum = game.GameParams.ToList();
                                 var utnum = tnum.Distinct().ToList();
 
@@ -171,6 +186,7 @@ namespace BOT.Handler
                     }
                 }
                 #endregion
+
                 #region 取消
                 else if (command.CommandType.Contains(CommandType.CANCEL))
                 {
@@ -201,6 +217,7 @@ namespace BOT.Handler
                     }
                 }
                 #endregion
+                
                 #region 大乐透
                 else if (command.CommandType.Contains(CommandType.LOTTERY))
                 {
@@ -333,7 +350,7 @@ namespace BOT.Handler
                 }
                 else if (command.CommandType.Contains(CommandType.LUCKY))
                 {
-                    await ConstellationHandler.execAsync(mem,g,command,messageReceiver);
+                    await ConstellationHandler.execAsync(mem, g, command, messageReceiver);
                 }
                 else if (command.CommandType.Contains(CommandType.TWENTYONE))
                 {
@@ -385,33 +402,11 @@ namespace BOT.Handler
 
         private static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg)
         {
-         
-            SendGroupMessageModule.Executed(receiver.Sender.Group.Id,msg);
-            //await receiver.SendGroupMessage($"".Append(msg)).ContinueWith((e)=> {
-            //    tcc.Over();
-            //    Console.WriteLine("发送耗时" + tcc.Span());
-            //});
-
+            await SendGroupMessageModule.sendGroupAsync(receiver,msg);
         }
         private static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg,bool atMsgPosition)
         {
-            TimeConsumingCounter tcc = new TimeConsumingCounter();
-            tcc.Start();
-            if (atMsgPosition)
-            {
-                await receiver.SendGroupMessage($"".Append(new AtMessage(receiver.Sender.Id)).Append(msg)).ContinueWith((e) => {
-                    tcc.Over();
-                    Console.WriteLine("发送耗时" + tcc.Span());
-                });
-            }
-            else
-            {
-                await receiver.SendGroupMessage($"".Append(msg).Append(new AtMessage(receiver.Sender.Id))).ContinueWith((e) => {
-                    tcc.Over();
-                    Console.WriteLine("发送耗时" + tcc.Span());
-                });
-            }
-           
+            await SendGroupMessageModule.sendGroupAtAsync(receiver,$"".Append(new AtMessage(receiver.Sender.Id)).Append(msg),atMsgPosition);
         }
     }
 

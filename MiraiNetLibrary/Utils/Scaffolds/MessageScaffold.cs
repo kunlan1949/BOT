@@ -3,9 +3,12 @@ using System.Linq;
 using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Messages.Concretes;
 
-namespace Mirai.Net.Utils.Extensions
+namespace Mirai.Net.Utils.Scaffolds
 {
-    public static class MessageBaseExtensions
+    /// <summary>
+    /// 消息相关的脚手架
+    /// </summary>
+    public static class MessageScaffold
     {
         public static MessageBase[] Append(this string origin, params MessageBase[] append)
         {

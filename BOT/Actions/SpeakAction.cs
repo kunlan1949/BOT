@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Speech.AudioFormat;
 using System.Speech.Synthesis;
-using System.Threading.Tasks;
 using System.Media;
 
 namespace BOT.Actions
@@ -15,7 +14,7 @@ namespace BOT.Actions
         public void Speak()
         {
             // Initialize a new instance of the SpeechSynthesizer.  
-            using (SpeechSynthesizer synth = new SpeechSynthesizer())
+            using (SpeechSynthesizer synth = new())
             {
 
                 // Configure the audio output.   

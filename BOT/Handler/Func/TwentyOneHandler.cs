@@ -25,8 +25,8 @@ namespace BOT.Handler.Func
                     {
                         if (pNum >= 2)
                         {
-                            var nt = new Twentyone();
-                            nt.BankerInitCard = 
+                            //var nt = new Twentyone();
+                            //nt.BankerInitCard = 
                         }
                         else
                         {

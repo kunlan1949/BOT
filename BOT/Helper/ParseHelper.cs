@@ -1,14 +1,12 @@
 ﻿using AHpx.Extensions.StringExtensions;
 using BOT.Model;
+using BOT.Module.Send;
 using Mirai.Net.Data.Messages;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages.Receivers;
 using Mirai.Net.Data.Modules;
 using Mirai.Net.Sessions;
-using Mirai.Net.Sessions.Http.Concretes;
 using Mirai.Net.Utils;
-using Mirai.Net.Utils.Extensions;
-using Mirai.Net.Utils.Extensions.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +30,6 @@ namespace BOT.Helper
             List<string> c = CommandStringParse(command);
             var commandType = "";
             var commandRight = true;
-            var msg = "";
             if (c[0].Contains(CommandType.EXEC))
             {
                 
@@ -90,7 +87,7 @@ namespace BOT.Helper
             if (c.Count <=1)
             {
                 commandRight = false;
-                await messageReceiver.SendGroupMessage("".Append(new AtMessage(messageReceiver.Sender.Id)).Append(ErrorBackInfo.ErrorBack(commandType)));
+                await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, ErrorBackInfo.ErrorBack(commandType),false);
                 //}
                 //else
                 //{
@@ -129,14 +126,13 @@ namespace BOT.Helper
             List<string> c = CommandStringParse(command);
             var commandType = "";
             var commandRight = true;
-            var msg = "";
             if (c[0].Contains(CommandType.EXEC))
             {
                 commandType = CommandType.EXEC;
                 if (c.Count <= 1)
                 {
                     commandRight = false;
-                    await messageReceiver.SendFriendMessage("".Append(ErrorBackInfo.ErrorBack(commandType)));
+                    await SendFriendMessageModule.sendFriendAsync(messageReceiver, ErrorBackInfo.ErrorBack(commandType));
                 }
             }
             else if (c[0].Contains(CommandType.BOTON))

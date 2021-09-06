@@ -15,7 +15,7 @@ namespace BOT
             var bot = new MiraiBot
             {
                 Address = "localhost:8080",
-                QQ = 1432119304,
+                QQ = "1432119304",
                 VerifyKey = "2048437217"
             };
             //if (bot == null)

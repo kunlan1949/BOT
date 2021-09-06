@@ -7,25 +7,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mirai.Net.Utils.Extensions;
 using Mirai.Net.Data.Messages.Concretes;
-using Mirai.Net.Utils.Extensions.Actions;
 using BOT.Helper;
 using Mirai.Net.Sessions;
-using Mirai.Net.Sessions.Http.Concretes;
 using BOT.Model;
 using BOT.Module.Send;
 using BOT.Handler;
 using Db.Bot;
 using BOT.Action;
 using BOT.Actions;
+using Mirai.Net.Utils.Scaffolds;
 
 namespace BOT.Module
 {
     public class GroupMessageModule
     {
 
-        public void Execute(MessageReceiverBase @base, MessageBase executeMessage)
+        public async Task ExecuteAsync(MessageReceiverBase @base, MessageBase executeMessage)
         {
             if (@base is GroupMessageReceiver receiver)
             {
@@ -50,17 +48,17 @@ namespace BOT.Module
                                 var member = Members.Find(Members._.MemQq == receiver.Sender.Id);
                                 if (member != null)
                                 {
-                                    InteractHandler.CommandAsync(member, g, m.Result, receiver, false);
+                                    await InteractHandler.CommandAsync(member, g, m.Result, receiver, false);
                                 }
                                 else
                                 {
-                                    InteractHandler.CommandAsync(null, g, m.Result, receiver, false);
+                                    await InteractHandler.CommandAsync(null, g, m.Result, receiver, false);
                                 }
 
                             }
                             else
                             {
-                                receiver.SendGroupMessage("".Append("错误，此QQ群组未被授权"));
+                              await SendGroupMessageModule.sendGroupAsync(receiver,"".Append("错误，此QQ群组未被授权"));
                                 //TimerAction.LatteryOpen();
                             }
                         }

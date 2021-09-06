@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using BookServer.NodeParse.Weather.jsonmodel;
 using BookServer.NodeParse.Weather.jsonmodel.http;
+using BOT.Utils;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 
@@ -25,6 +26,7 @@ namespace BookServer.NodeParse.Weather
             htmlDoc.LoadHtml(html);
             return htmlDoc;
         }
+
         public static WeatherModel WeatherResult(string code)
         {
             ////*[@class='bgwhite_']/div/div[2]/div[3]/div[1]/div/div[6]
@@ -100,21 +102,80 @@ namespace BookServer.NodeParse.Weather
             //var weather = weNode.InnerText;
 
             string response = HttpApi.HttpGet("http://www.nmc.cn/rest/weather?stationid=" + $"{code}");
-            WeatherJsonModel w = JsonConvert.DeserializeObject<WeatherJsonModel>(response);
+            var jsonSetting = new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include};
+            jsonSetting.MissingMemberHandling = MissingMemberHandling.Ignore;
+            jsonSetting.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            jsonSetting.NullValueHandling = NullValueHandling.Ignore;
+            jsonSetting.DefaultValueHandling = DefaultValueHandling.Include;
+            jsonSetting.ObjectCreationHandling = ObjectCreationHandling.Auto;
+            jsonSetting.TypeNameHandling = TypeNameHandling.Auto;
+            WeatherJsonModel w = JsonConvert.DeserializeObject<WeatherJsonModel>(response, jsonSetting);
+           
+            var currentTime = "无数据";
+            var rain = "无数据";
+            var realFeelst = "无数据";
+            var currentTemp = "无数据";
+            var relativeHumidity = "无数据";
+            var airQuality = "无数据";
+            var weather = "无数据";
+            var wind = new Windy() { WindDirect ="未知",WindSpeed ="未知"};
+            try
+            {
+                if (w.data.real.publish_time != null)
+                {
+                    currentTime = w.data.real.publish_time;
+                }
+                if (w.data.real.weather.rain.ToString() != null)
+                {
+                    rain = w.data.real.weather.rain.ToString();
+                }
+                if (w.data.real.weather.feelst.ToString() != null)
+                {
+                    realFeelst = w.data.real.weather.feelst.ToString();
+                }
+                if (w.data.real.weather.temperature.ToString() != null)
+                {
+                    currentTemp = w.data.real.weather.temperature.ToString();
+                }
+                if (w.data.real.weather.humidity.ToString() != null)
+                {
+                    relativeHumidity = w.data.real.weather.humidity.ToString();
+                }
+                if (w.data.air!= null)
+                {
+                    airQuality = w.data.air.aqi.ToString();
+                }
+                if (w.data.predict.detail[0] != null)
+                {
+                    
+                    weather = WeatherUtil.WeatherChoose(w.data.predict.detail[0].day.weather.info, w.data.predict.detail[0].night.weather.info);
+                }
+                if (w.data.real.wind.direct != null && w.data.real.wind.power !=null)
+                {
+                    wind = new Windy() { WindDirect = w.data.real.wind.direct, WindSpeed = w.data.real.wind.power };
+                }
+              
+              
+              
+         
+               
+               
+            }
+            catch(Exception e)
+            {
 
+            }
             var result = new WeatherModel
             {
-                CurrentTime = w.data.real.publish_time,
-                Rain = w.data.real.weather.rain.ToString(),
-                RealFeelst = w.data.real.weather.feelst.ToString(),
-                CurrentTemp = w.data.real.weather.temperature.ToString(),
-                RelativeHumidity = w.data.real.weather.humidity.ToString(),
-                AirQuality = w.data.air.aqi.ToString(),
-                Weather = w.data.real.weather.info,
-                wind = new Windy() { WindDirect = w.data.real.wind.direct, WindSpeed = w.data.real.wind.power }
-
+                CurrentTime = currentTime,
+                Rain = rain,
+                RealFeelst = realFeelst,
+                CurrentTemp = currentTemp,
+                RelativeHumidity = relativeHumidity,
+                AirQuality = airQuality,
+                Weather = weather,
+                Wind = wind
             };
-
             return result;
         }
     }

@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="AHpx.Extensions" Version="1.0.1" />
+    <PackageReference Include="Flurl" Version="3.0.2" />
+    <PackageReference Include="Flurl.Http" Version="3.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Websocket.Client" Version="4.3.36" />
   </ItemGroup>
