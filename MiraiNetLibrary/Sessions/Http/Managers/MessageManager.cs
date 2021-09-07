@@ -104,7 +104,6 @@ namespace Mirai.Net.Sessions.Http.Managers
             {
                 target = messageId
             };
-
             await HttpEndpoints.Recall.PostJsonAsync(payload);
         }
         

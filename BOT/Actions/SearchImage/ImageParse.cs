@@ -1,20 +1,16 @@
-﻿using BOT.Model;
-using Db.Bot;
-using Flurl;
-using Flurl.Http;
-using HtmlAgilityPack;
-using Mirai.Net.Data.Messages.Receivers;
-using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using BOT.Model;
+using HtmlAgilityPack;
+using RestSharp;
 
 namespace BOT.Actions.SearchImage
 {
-    class SearchImageAction
+    public class ImageParse
     {
+       
         public static async Task<List<ImageModel>> imgAsync(string uri)
         {
             var client = new RestClient("https://ascii2d.net/search/uri");
@@ -30,7 +26,7 @@ namespace BOT.Actions.SearchImage
             request.AddParameter("uri", $"{uri}");
             request.AddParameter("search", "");
 
-
+            
 
             var response = await client.ExecuteAsync(request);
             Console.WriteLine(response.ResponseUri);
@@ -53,9 +49,9 @@ namespace BOT.Actions.SearchImage
             var imageUrlParse = "/div/img";
             var imageDetailParse = "//*[@class='detail-box gray-link']/h6/a[1]";
             var imageAuthorParse = "//*[@class='detail-box gray-link']/h6/a[2]";
-
+            
             //var locationParse = "//*[@class='detail - box gray - link']/h6/small";
-            for (int i = 1; i < length; i++)
+            for (int i=1;i <length; i++)
             {
                 var nc = doch(mainNode[i].InnerHtml);
 
@@ -77,7 +73,7 @@ namespace BOT.Actions.SearchImage
                     {
                         DetailUrl = imageDetailUrl,
                         ImageAuthorUrl = imageAuthorUrl,
-                        PreImageUrl = "https://ascii2d.net" + imageUrl,
+                        PreImageUrl = "https://ascii2d.net"+imageUrl,
                         AuthorName = authorName,
                         ImageName = imageName,
                         ImageLocation = location
@@ -95,7 +91,5 @@ namespace BOT.Actions.SearchImage
             htmlDoc.LoadHtml(html);
             return htmlDoc;
         }
-
-
     }
 }

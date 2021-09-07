@@ -71,6 +71,9 @@ namespace Db.Bot
         //    entity.MemNicknumber = "abc";
         //    entity.MemQq = "abc";
         //    entity.MemLimit = 0;
+        //    entity.SimageLimit = 0;
+        //    entity.ImgTime = "abc";
+        //    entity.SImg = 0;
         //    entity.MemPoint = 0;
         //    entity.MemLottery = "abc";
         //    entity.MemLotteryId = "abc";

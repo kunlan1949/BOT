@@ -45,7 +45,7 @@ namespace BOT.Module
                             Console.WriteLine("互动模式");
                             if (g != null)
                             {
-                                var member = Members.Find(Members._.MemQq == receiver.Sender.Id);
+                                var member = Members.Find(Members._.MemQq == receiver.Sender.Id & Members._.MemGroup == receiver.Sender.Group.Id );
                                 if (member != null)
                                 {
                                     await InteractHandler.CommandAsync(member, g, m.Result, receiver, false);

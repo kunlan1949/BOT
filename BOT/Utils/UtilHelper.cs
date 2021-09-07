@@ -91,6 +91,22 @@ namespace BOT.Utils
             }
             return istoday;
         }
+
+        public static string ConvertFirstUpper(string str)
+        {
+            var sStr = str.ToLower();
+            var dStr = "";
+            if (sStr.Length > 1)
+            {
+                dStr = sStr.Substring(0, 1).ToUpper() + sStr.Substring(1);
+            }
+            else
+            {
+                dStr = str;
+            }
+           
+            return dStr;
+        }
     }
     
 }

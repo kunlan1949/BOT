@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BOT", "BOT\BOT.csproj", "{18EB9B36-8553-41B0-8E8B-19FB5F758A1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiraiNetLibrary", "MiraiNetLibrary\MiraiNetLibrary.csproj", "{795ABD6B-B3D5-4744-BCB4-FB11B0EC3B20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiraiNetLibrary", "MiraiNetLibrary\MiraiNetLibrary.csproj", "{795ABD6B-B3D5-4744-BCB4-FB11B0EC3B20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{F96008FA-0D5B-4EAC-A699-DEE865A3766D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{795ABD6B-B3D5-4744-BCB4-FB11B0EC3B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{795ABD6B-B3D5-4744-BCB4-FB11B0EC3B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{795ABD6B-B3D5-4744-BCB4-FB11B0EC3B20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F96008FA-0D5B-4EAC-A699-DEE865A3766D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F96008FA-0D5B-4EAC-A699-DEE865A3766D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F96008FA-0D5B-4EAC-A699-DEE865A3766D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F96008FA-0D5B-4EAC-A699-DEE865A3766D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

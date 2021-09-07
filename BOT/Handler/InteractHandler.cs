@@ -88,19 +88,7 @@ namespace BOT.Handler
                     }
                     else if (command.Target.Contains(TargetType.SIMAGE))
                     {
-                        var image = messageReceiver.MessageChain.WhereAndCast<ImageMessage>();
-                        if (image != null)
-                        {
-                            if (image.Length > 0)
-                            {
-                                Console.WriteLine(image[0].Url);
-                            }
-                            else
-                            {
-                                await sendGroupAsync(messageReceiver,"请发送您想要查找的图片!",false);
-                            }
-                            
-                        }
+                        await SImageHandler.exeAsync(mem,g,command,messageReceiver);
                     }
                 }
                 #endregion
@@ -376,6 +364,9 @@ namespace BOT.Handler
                             nm.MemPoint = 200;
                             nm.MemExist = 0;
                             nm.MemLimit = 5;
+                            nm.SimageLimit = 5;
+                            nm.ImgTime = UtilHelper.GetTimeUnix().ToString();
+                            nm.SImg = 0;
                             nm.MemQq = messageReceiver.Sender.Id;
                             nm.Insert();
                             var num = g.GrpNumber;
@@ -399,14 +390,13 @@ namespace BOT.Handler
             return "";
         }
 
-
         private static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg)
         {
             await SendGroupMessageModule.sendGroupAsync(receiver,msg);
         }
         private static async Task sendGroupAsync(GroupMessageReceiver receiver, string msg,bool atMsgPosition)
         {
-            await SendGroupMessageModule.sendGroupAtAsync(receiver,$"".Append(new AtMessage(receiver.Sender.Id)).Append(msg),atMsgPosition);
+            await SendGroupMessageModule.sendGroupAtAsync(receiver,msg,atMsgPosition);
         }
     }
 
