@@ -27,6 +27,12 @@ namespace BOT.Module
         {
             if (@base is GroupMessageReceiver receiver)
             {
+                //var me = receiver.MessageChain.WhereAndCast<FaceMessage>();
+                //if (me != null)
+                //{
+                //    Console.WriteLine(me[0].FaceId + "|" + me[0].Name);
+                //}
+
                 foreach (var message in receiver.MessageChain.WhereAndCast<PlainMessage>())
                 {
                     TimeConsumingCounter tcc = new TimeConsumingCounter();
@@ -39,7 +45,8 @@ namespace BOT.Module
                         if (m.Result.CommandType.Contains(CommandType.BOT) || m.Result.CommandType.Contains(CommandType.IGUSS)
                             || m.Result.CommandType.Contains(CommandType.CANCEL) || m.Result.CommandType.Contains(CommandType.LOTTERY)
                             || m.Result.CommandType.Contains(CommandType.CASHPRIZE) || m.Result.CommandType.Contains(CommandType.LUCKY) 
-                            || m.Result.CommandType.Contains(CommandType.WEATHER) || m.Result.CommandType.Contains(CommandType.TWENTYONE))
+                            || m.Result.CommandType.Contains(CommandType.WEATHER) || m.Result.CommandType.Contains(CommandType.TWENTYONE) 
+                            || m.Result.CommandType.Contains(CommandType.TRANS))
                         {
                             var g = Groups.Find(Groups._.GrpId == receiver.Sender.Group.Id);
                             Console.WriteLine("互动模式");

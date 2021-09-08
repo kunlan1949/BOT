@@ -24,7 +24,7 @@ namespace BOT.Handler.Func
                 if (city != null)
                 {
                     var result = WeatherParse.WeatherResult(city.CityCode);
-                    await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, $"更新时间[{result.CurrentTime}]\n".Append($"{city.CityName} 今天{result.Weather}\n当前气温 {result.CurrentTemp}℃\n体感温度 {result.RealFeelst}℃ \n空气质量为：【{WeatherUtil.AirQuality(result.AirQuality)}】{result.AirQuality}\n{result.Wind.WindDirect} ：{result.Wind.WindSpeed}"), true);
+                    await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, $"更新时间[{result.CurrentTime}]\n {city.CityName} 今天{result.Weather}\n当前气温 {result.CurrentTemp}℃\n体感温度 {result.RealFeelst}℃ \n空气质量为：【{WeatherUtil.AirQuality(result.AirQuality)}】{result.AirQuality}\n{result.Wind.WindDirect} ：{result.Wind.WindSpeed}", false);
                 }
                 else
                 {

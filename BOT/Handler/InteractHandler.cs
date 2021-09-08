@@ -1,5 +1,6 @@
 ﻿using BOT.Actions;
 using BOT.Handler.Func;
+using BOT.Helper;
 using BOT.Model;
 using BOT.Model.Game;
 using BOT.Module.Send;
@@ -34,10 +35,23 @@ namespace BOT.Handler
             #region 存在注册成员
             if (exist_m)
             {
-                #region BOT
+                #region @BOT
                 if (command.CommandType.Contains(CommandType.BOT))
                 {
-                    if (command.Target.Contains(TargetType.GUSSNUM))
+
+                    #region 注册
+                    if (command.Target.Contains(TargetType.REGISTER))
+                    {
+                        var m = Members.Find(Members._.MemQq == messageReceiver.Sender.Id & Members._.MemGroup == messageReceiver.Sender.Group.Id);
+                        if (m != null)
+                        {
+                            await sendGroupAsync(messageReceiver, $"成员已注册！");
+                        }
+                    }
+                    #endregion
+
+                    #region 猜数字
+                    else if (command.Target.Contains(TargetType.GUSSNUM))
                     {
 
                         if (!g.GrpGuessnum.Contains("-1"))
@@ -78,18 +92,21 @@ namespace BOT.Handler
                             await sendGroupAsync(messageReceiver, $"游戏{command.CommandType}未开启，请管理员开启后开始游戏");
                         }
                     }
-                    else if (command.Target.Contains(TargetType.REGISTER))
-                    {
-                        var m = Members.Find(Members._.MemQq == messageReceiver.Sender.Id & Members._.MemGroup == messageReceiver.Sender.Group.Id);
-                        if (m != null)
-                        {
-                            await sendGroupAsync(messageReceiver, $"成员已注册！");
-                        }
-                    }
+                    #endregion
+
+                    #region 识图
                     else if (command.Target.Contains(TargetType.SIMAGE))
                     {
                         await SImageHandler.exeAsync(mem,g,command,messageReceiver);
                     }
+                    #endregion
+
+                    #region 帮助菜单
+                    else if (command.Target.Contains(TargetType.FORHELP))
+                    {
+                        await HelpHandler.execAsync(mem, g, command, messageReceiver);
+                    }
+                    #endregion
                 }
                 #endregion
 
@@ -257,6 +274,7 @@ namespace BOT.Handler
                     }
                 }
                 #endregion
+
                 #region 兑奖
                 else if (command.CommandType.Contains(CommandType.CASHPRIZE))
                 {
@@ -331,21 +349,40 @@ namespace BOT.Handler
                         await sendGroupAsync(messageReceiver, $"错误，请检查指令格式!");
                     }
                 }
-                #endregion 
+                #endregion
+
+                #region 天气
                 else if (command.CommandType.Contains(CommandType.WEATHER))
                 {
                     await WeatherHandler.execAsync(mem, g, command, messageReceiver);
                 }
+                #endregion
+
+                #region 翻译
+                else if (command.CommandType.Contains(CommandType.TRANS))
+                {
+                    await TranslateHandler.execAsync(mem, g, command, messageReceiver);
+                }
+                #endregion
+
+
+                #region 运势
                 else if (command.CommandType.Contains(CommandType.LUCKY))
                 {
                     await ConstellationHandler.execAsync(mem, g, command, messageReceiver);
                 }
+                #endregion
+
+                #region 二十一点
                 else if (command.CommandType.Contains(CommandType.TWENTYONE))
                 {
                     await TwentyOneHandler.startAsync(mem, g, command, messageReceiver);
                 }
+                #endregion
             }
             #endregion
+
+
             else
             {
                 if (command.CommandType.Contains(CommandType.BOT)){

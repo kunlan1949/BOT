@@ -27,6 +27,7 @@ namespace BOT.Handler.Func
                 if (!UtilHelper.ISTODAY(mem.ImgTime))
                 {
                     mem.SimageLimit = 5;
+                    mem.ImgTime = UtilHelper.GetTimeUnix().ToString();
                     mem.Update();
                 }
                 if (mem.SimageLimit > 0)
@@ -38,6 +39,10 @@ namespace BOT.Handler.Func
                             if (command.Params.Contains("模糊"))
                             {
                                 await exeMutliAsync(mem, g, command, messageReceiver);
+                            }
+                            else
+                            {
+                                await exeDefaultAsync(mem, g, command, messageReceiver);
                             }
                         }
                         else
@@ -89,7 +94,8 @@ namespace BOT.Handler.Func
                         .Append($"作品名:{imageInfoList.First().ImageName}\n")
                         .Append($"作品详情链接:{imageInfoList.First().DetailUrl}\n")
                         .Append($"出处:{loca}\n")
-                        .Append($"作品有可能同时出现在Pixiv和Twitter上，本查询优先展示Twitter\n");
+                        .Append($"作品有可能同时出现在Pixiv和Twitter上，\n本查询优先展示Twitter\n")
+                        .Append($"您的本日查询次数剩余 {mem.SimageLimit} 次，次数会在每日凌晨更新!\n");
                         await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, msg, false);
 
                         //修改数据库
@@ -148,7 +154,8 @@ namespace BOT.Handler.Func
                     .Append(new ImageMessage() { Url = url, Type = Messages.Image })
                     .Append($"作品详情链接:{results.Matches[0].Url}\n")
                     .Append($"出处:{loca}\n")
-                    .Append($"准确度：{results.Matches[0].Similarity}%\n【准确度大于90%时成功率高】\n");
+                    .Append($"准确度：{results.Matches[0].Similarity}%\n【大于90%匹配度高,具体以缩略图为准】\n")
+                    .Append($"您的本日查询次数剩余 {mem.SimageLimit} 次，次数会在每日凌晨更新!\n");
                     await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, msg, false);
 
                     //修改数据库

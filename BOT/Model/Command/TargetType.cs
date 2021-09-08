@@ -27,7 +27,7 @@ namespace BOT.Model
         public static string GUSSNUM = "猜数字";
         public static string CHENGYU = "成语接龙";
         public static string SIMAGE = "识图";
-
+        public static string FORHELP = "帮助";
         public static Dictionary<string, int> Sign = new Dictionary<string, int>
         {
             {"白羊", 0},

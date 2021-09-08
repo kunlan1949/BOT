@@ -29,10 +29,10 @@ namespace BOT.Helper
         {
             List<string> c = CommandStringParse(command);
             var commandType = "";
+            bool needParam = true;
             var commandRight = true;
             if (c[0].Contains(CommandType.EXEC))
             {
-                
                 commandType = CommandType.EXEC;
             }
             else if (c[0].Contains(CommandType.BOTON))
@@ -79,6 +79,11 @@ namespace BOT.Helper
             {
                 commandType = CommandType.CANCEL;
             }
+            else if (c[0].Contains(CommandType.TRANS))
+            {
+                needParam = false;
+                commandType = CommandType.TRANS;
+            }
             else
             {
                 return null;
@@ -99,6 +104,7 @@ namespace BOT.Helper
             if (commandRight)
             {
                 var p = "";
+                var tar = c[1];
                 if (c.Count <= 2)
                 {
                     p = "";
@@ -107,12 +113,19 @@ namespace BOT.Helper
                 {
                     p = c[2];
                 }
+                if (!needParam)
+                {
+                    if (commandType.Contains(CommandType.TRANS))
+                    {
+                        tar = command.Replace("翻译 ", "");
+                    }
+                    p = "";
+                }
                 var attribute = new CommandAttribute
                 {
                     CommandType = commandType,
-                    Target = c[1],
+                    Target = tar,
                     Params = p
-
                 };
                 return attribute;
             }

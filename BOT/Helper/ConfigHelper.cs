@@ -10,6 +10,18 @@ namespace BOT.Helper
 {
     class ConfigHelper
     {
+        public static string BName()
+        {
+            var builder = new ConfigurationBuilder();
+            builder.AddXmlFile("setting.config", optional: true, reloadOnChange: true);
+
+            var configuration = builder.Build();
+
+            var BotName = configuration.GetSection("BotName:value").Value;
+
+            return BotName;
+        }
+
         public static ConfigModel GetInfo()
         {
             var builder = new ConfigurationBuilder();
@@ -20,7 +32,6 @@ namespace BOT.Helper
             var Number = configuration.GetSection("Number:value").Value;
             var VerifyKey = configuration.GetSection("VerifyKey:value").Value;
             var Address = configuration.GetSection("Address:value").Value;
-           
             if (Number == null || VerifyKey == null || Address == null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;

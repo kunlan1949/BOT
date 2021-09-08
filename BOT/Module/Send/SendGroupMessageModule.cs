@@ -120,7 +120,7 @@ namespace BOT.Module.Send
             tcc.Start();
             if (atMsgPosition)
             {
-                await receiver.SendGroupMessageAsync("".Append(new AtMessage(receiver.Sender.Id)+""+ msg)).ContinueWith((e) => {
+                await receiver.SendGroupMessageAsync("".Append(new AtMessage(receiver.Sender.Id)).Append(msg)).ContinueWith((e) => {
                     tcc.Over();
                     Console.WriteLine("发送耗时" + tcc.Span());
                 });

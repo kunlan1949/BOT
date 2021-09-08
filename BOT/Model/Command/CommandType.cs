@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BOT.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace BOT.Model
 {
     public class CommandType
     {
-        public static string BOT = "AAA";
+        public static string BOT = ConfigHelper.BName();
 
         public static string YESNO = "/yn";
 
@@ -35,6 +36,8 @@ namespace BOT.Model
         public static string CASHPRIZE = "兑奖";
         public static string TWENTYONE = "二十一点";
         public static string LUCKY = "运势";
+        public static string TRANS = "翻译";
+
         ///增加复读关键字
         ///【/copyread [你好,早上好]】
         public static string CopyRead = "/copyread";
