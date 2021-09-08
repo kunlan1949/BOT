@@ -20,16 +20,37 @@ namespace BOT.Handler.Func
     {
         public static async Task execAsync(Members mem, Groups g, CommandAttribute command, GroupMessageReceiver messageReceiver)
         {
-            var c = Constellation.Find(Constellation._.Sign == command.Target);
-            if (c!=null)
+            var d = dic(command.Target);
+            if (d>0)
             {
-                if (UtilHelper.ISTODAY(c.UpdateTime))
+                var c = Constellation.Find(Constellation._.Sign == command.Target);
+                if (c != null)
                 {
-                    Console.WriteLine("存在，数据库获取");
-                    await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, c.LuckResult, true);
-                }else
+                    if (UtilHelper.ISTODAY(c.UpdateTime))
+                    {
+                        Console.WriteLine("存在，数据库获取");
+                        await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, c.LuckResult, true);
+                    }
+                    else
+                    {
+                        Console.WriteLine("过时，网页重新获取");
+                        var m = dic(command.Target);
+
+                        var result = "";
+                        var web = new HtmlWeb();
+                        var htmlDocument = ConstellationParse.MainParseAsync().Result;
+                        var parse = ConstellationParse.Parse((SignModel.Sign)m);
+                        result = ConstellationParse.luckResultAsync(parse, htmlDocument).Result;
+
+                        await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, result, true);
+                        c.LuckResult = result;
+                        c.UpdateTime = UtilHelper.GetUTCTimeUnix().ToString();
+                        c.Update();
+                    }
+                }
+                else
                 {
-                    Console.WriteLine("过时，网页重新获取");
+                    Console.WriteLine("不存在，网页获取");
                     var m = dic(command.Target);
 
                     var result = "";
@@ -37,30 +58,19 @@ namespace BOT.Handler.Func
                     var htmlDocument = ConstellationParse.MainParseAsync().Result;
                     var parse = ConstellationParse.Parse((SignModel.Sign)m);
                     result = ConstellationParse.luckResultAsync(parse, htmlDocument).Result;
-
                     await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, result, true);
-                    c.LuckResult = result;
-                    c.UpdateTime = UtilHelper.GetUTCTimeUnix().ToString();
-                    c.Update();
+                    var nc = new Constellation();
+                    nc.Sign = command.Target;
+                    nc.LuckResult = result;
+                    nc.UpdateTime = UtilHelper.GetUTCTimeUnix().ToString();
+                    nc.Insert();
                 }
             }
             else
             {
-                Console.WriteLine("不存在，网页获取");
-                var m = dic(command.Target);
-
-                var result = "";
-                var web = new HtmlWeb();
-                var htmlDocument = ConstellationParse.MainParseAsync().Result;
-                var parse = ConstellationParse.Parse((SignModel.Sign)m);
-                result = ConstellationParse.luckResultAsync(parse, htmlDocument).Result;
-                await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, result, true);
-                var nc = new Constellation();
-                nc.Sign = command.Target;
-                nc.LuckResult = result;
-                nc.UpdateTime = UtilHelper.GetUTCTimeUnix().ToString();
-                nc.Insert();
+                await SendGroupMessageModule.sendGroupAsync(messageReceiver, "不存在的星座，请输入正确的星座名！");
             }
+           
         }
 
         private static int dic(string target)
@@ -72,7 +82,7 @@ namespace BOT.Handler.Func
             }
             else
             {
-                value = TargetType.Sign[target];
+                value =-1;
             }
             return value;
         }
