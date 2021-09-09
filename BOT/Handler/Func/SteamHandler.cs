@@ -43,7 +43,7 @@ namespace BOT.Handler.Func
                     }
 
 
-                    commonMsg = "【图片显示暂时受限！】\n"//.Append(new ImageMessage() { Url = value.GameImgUrl,Type = Messages.Image})
+                    commonMsg = "".Append(new ImageMessage() { Url = value.GameImgUrl,Type = Messages.Image})
                     .Append(
                         $"游戏ID：{value.GameId}\n" +
                         $"游戏名：{value.GameName}\n" +
