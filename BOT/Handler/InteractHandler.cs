@@ -365,6 +365,12 @@ namespace BOT.Handler
                 }
                 #endregion
 
+                #region 查游戏
+                else if (command.CommandType.Contains(CommandType.SGAME))
+                {
+                    await SteamHandler.execAsync(mem, g, command, messageReceiver);
+                }
+                #endregion
 
                 #region 运势
                 else if (command.CommandType.Contains(CommandType.LUCKY))

@@ -63,10 +63,28 @@ namespace BOT.Actions.SearchImage
                 var locationNode = nc.DocumentNode.SelectSingleNode(locationParse);
                 var imageAuthorNode = nc.DocumentNode.SelectSingleNode(imageAuthorParse);
                 var imageDetailNode = nc.DocumentNode.SelectSingleNode(imageDetailParse);
-
-                var location = locationNode.InnerText;
-                var imageAuthorUrl = imageAuthorNode.Attributes["href"].Value;
-                var authorName = imageAuthorNode.InnerText;
+                var location = "";
+                if (locationNode !=null)
+                {
+                    location = locationNode.InnerText;
+                }
+                else
+                {
+                    location = "不存在";
+                }
+                var imageAuthorUrl = "";
+                var authorName = "";
+                if (imageAuthorNode != null)
+                {
+                    imageAuthorUrl = imageAuthorNode.Attributes["href"].Value;
+                    authorName = imageAuthorNode.InnerText;
+                }
+                else
+                {
+                    imageAuthorUrl = "不存在";
+                    authorName = "未知";
+                }
+                
                 var imageName = imageDetailNode.InnerText;
                 var imageDetailUrl = imageDetailNode.Attributes["href"].Value;
                 var imageUrl = imageUrlNode.Attributes["src"].Value;

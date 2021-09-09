@@ -37,6 +37,7 @@ namespace BOT.Model
         public static string TWENTYONE = "二十一点";
         public static string LUCKY = "运势";
         public static string TRANS = "翻译";
+        public static string SGAME = "查游戏";
 
         ///增加复读关键字
         ///【/copyread [你好,早上好]】

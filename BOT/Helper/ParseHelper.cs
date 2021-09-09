@@ -84,6 +84,11 @@ namespace BOT.Helper
                 needParam = false;
                 commandType = CommandType.TRANS;
             }
+            else if (c[0].Contains(CommandType.SGAME))
+            {
+                needParam = false;
+                commandType = CommandType.SGAME;
+            }
             else
             {
                 return null;
@@ -117,7 +122,11 @@ namespace BOT.Helper
                 {
                     if (commandType.Contains(CommandType.TRANS))
                     {
-                        tar = command.Replace("翻译 ", "");
+                        tar = command.Replace($"{CommandType.TRANS} ", "");
+                    }
+                    else if (commandType.Contains(CommandType.SGAME))
+                    {
+                        tar = command.Replace($"{CommandType.SGAME} ", "");
                     }
                     p = "";
                 }

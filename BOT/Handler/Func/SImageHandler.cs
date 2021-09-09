@@ -82,13 +82,16 @@ namespace BOT.Handler.Func
                     await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, "识图需要时间，请耐心等待！", false);
                     Console.WriteLine($"要查找的图片链接：【{image[0].Url}】+【{image[0].Base64}】");
                     MessageBase[] msg = { };
+                    
+                  
+
                     await SearchImageAction.imgAsync(image[0].Url).ContinueWith(async (e)=> {
                         var imageInfoList = e.Result;
                         //foreach(var imageInfo in imageInfoList) {
-
                         var loca = imgLocationTrans(imageInfoList.First().ImageLocation);
                         msg = "".Append("识图信息来源：【ASCII2D】\n")
-                        .Append(new ImageMessage() { Url = imageInfoList.First().PreImageUrl, Type = Messages.Image })
+                        .Append("【图片显示暂时受限！】\n")
+                       // .Append(new ImageMessage() { Url = imageInfoList.First().PreImageUrl, Type = Messages.Image })
                         .Append($"作者:{imageInfoList.First().AuthorName}\n")
                             .Append($"作者链接:{imageInfoList.First().ImageAuthorUrl}\n")
                         .Append($"作品名:{imageInfoList.First().ImageName}\n")
@@ -151,7 +154,8 @@ namespace BOT.Handler.Func
                     Console.WriteLine(url);
                     var loca = imgLocationTrans(results.Matches[0].Source.ToString());
                     msg = "".Append("识图信息来源：【IQDB】\n")
-                    .Append(new ImageMessage() { Url = url, Type = Messages.Image })
+                    .Append("【图片显示暂时受限！】\n")
+                    //.Append(new ImageMessage() { Url = url, Type = Messages.Image })
                     .Append($"作品详情链接:{results.Matches[0].Url}\n")
                     .Append($"出处:{loca}\n")
                     .Append($"准确度：{results.Matches[0].Similarity}%\n【大于90%匹配度高,具体以缩略图为准】\n")
