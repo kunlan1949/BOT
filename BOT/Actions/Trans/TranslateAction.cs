@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BOT.Actions.Trans
 {
@@ -27,7 +28,7 @@ namespace BOT.Actions.Trans
                 var p = GetParam(word);
                 var dict = new Dictionary<string, string>()
                 {
-                    {"i",word },
+                    {"i",word.Replace(" ","+") },
                     {"from","AUTO" },
                     {"to","AUTO" },
                     {"smartresult","dict" },
@@ -45,7 +46,11 @@ namespace BOT.Actions.Trans
 
                 using (var dt = JsonDocument.Parse(str))
                 {
-                    trans = dt.RootElement.GetProperty("translateResult")[0][0].GetProperty("tgt").ToString();
+                    for(int i=0;i< dt.RootElement.GetProperty("translateResult")[0].GetArrayLength(); i++)
+                    {
+                        trans+= dt.RootElement.GetProperty("translateResult")[0][i].GetProperty("tgt").ToString();
+                    }
+                        
                 }
             }
             catch (Exception ex)

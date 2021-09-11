@@ -1,0 +1,137 @@
+.body {
+    background: #b4b4b4;
+  }
+  #bg{
+    width: 758px;
+    height: 2360px;
+    background:#2cd7f5
+  }
+  #mainpage {
+    width: 750px;
+    height: 2355px;
+    left: 40px;
+    top: 0px;
+    width: 750px;
+    height: 2355px;
+    background: linear-gradient(
+      138.63deg,
+      rgba(250, 92, 92, 1) 0%,
+      rgba(232, 65, 65, 1) 99.96%
+    );
+  }
+  
+  #title1 {
+    position:absolute;
+    left: 43px;
+    top: 62px;
+    width: 400px;
+    height: 120px;
+    font-size: 82px;
+    color: white;
+  }
+
+  #titleSplit{
+    left: 229px;
+    top: 58px;
+    width: 379px;
+    height: 139px;
+    position: absolute;
+  }
+
+  #titleimg{
+    left: 519px;
+    top: 48px;
+    width: 159px;
+    height: 159px;
+    position: absolute;
+  }
+
+  #contentBG{
+    left: 32px;
+    top: 636px;
+    width: 686px;
+    height: 1469px;
+    border-radius:16px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+    position: absolute;
+  }
+
+  #middleImg{
+    left: 50px;
+    top: 229px;
+    width: 326px;
+    height: 260px;
+    position: absolute;
+  }
+  #middleTitle{
+    font-size: 48px;
+    color: white;
+    left: 35px;
+    top: 521px;
+    width: 341px;
+    height: 72px;
+    position: absolute;
+  }
+
+  #middleDate{
+    left: 437px;
+    top: 263px;
+    width: 284px;
+    height: 82px;
+    color: rgba(255, 255, 255, 1);
+    font-size: 36px;
+    position: absolute;
+  }
+
+  #middleWeek{
+    left: 437px;
+    top: 324px;
+    width: 303px;
+    height: 72px;
+    color:rgba(255, 255, 255, 1);
+    font-size: 36px;
+    position: absolute;
+  }
+
+
+  #middleNYear{
+    font-size: 20px;
+    left: 437px;
+    top: 396px;
+    width: 232px;
+    height: 49px;
+    color:rgba(255, 255, 255, 1);
+    position: absolute;
+  }
+
+  #middleZWYear{
+    font-size: 20px;
+    left: 437px;
+    top: 434px;
+    width: 209px;
+    height: 37px;
+    color:rgba(255, 255, 255, 1);
+    position: absolute;
+  }
+
+  #middleGood{
+    font-size: 20px;
+    left: 437px;
+    top: 477px;
+    width: 272px;
+    height: 49px;
+    color:rgba(255, 255, 255, 1);
+    position: absolute;
+  }
+
+
+  #middleBad{
+    font-size: 20px;
+    left: 437px;
+    top: 521px;
+    width: 272px;
+    height: 49px;
+    color:rgba(255, 255, 255, 1);
+    position: absolute;
+  }

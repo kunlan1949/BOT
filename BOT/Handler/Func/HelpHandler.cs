@@ -45,7 +45,7 @@ namespace BOT.Handler.Func
                     }
                     else if (command.Params == "6" || command.Params.Contains("游戏查询"))
                     {
-
+                         await SGameAsync(mem, g, command, messageReceiver);
                     }
                     else if (command.Params == "7" || command.Params.Contains("每日新闻"))
                     {
@@ -155,6 +155,22 @@ namespace BOT.Handler.Func
         }
         #endregion
 
+        #region 查游戏帮助
+        private static async Task SGameAsync(Members mem, Groups g, CommandAttribute command, GroupMessageReceiver messageReceiver)
+        {
+            var botName = ConfigHelper.BName();
+            var wwface = new FaceMessage() { FaceId = "277", Type = Messages.Face };
+            MessageBase[] msg = { };
+            msg = "".Append(wwface).Append($"查询游戏").Append(wwface)
+                .Append("【注意单空格】\n").Append(
+                $"[指令]：查游戏 你老婆\n" +
+                $"目前仅提供Steam（非蒸汽服）查询\n" +
+                $"数据均来自于【Steam Store】");
+
+            await SendGroupMessageModule.sendGroupAsync(messageReceiver, msg);
+        }
+        #endregion
+
         #region 识图帮助
         private static async Task SImageHelpAsync(Members mem, Groups g, CommandAttribute command, GroupMessageReceiver messageReceiver)
         {
@@ -199,12 +215,14 @@ namespace BOT.Handler.Func
         private static async Task TransAsync(Members mem, Groups g, CommandAttribute command, GroupMessageReceiver messageReceiver)
         {
             var kuface = new FaceMessage() { FaceId = "16", Type = Messages.Face };
+            var hhdface = new FaceMessage() { FaceId = "272", Type = Messages.Face };
             MessageBase[] msg = { };
             msg = "".Append(kuface).Append($"中英互译").Append(kuface)
                 .Append("【注意单空格】\n").Append(
                 $"数据源来源：【有道翻译】\n" +
                 $"[指令]：翻译 I love You\n" +
-                $"妈妈再也不用担心我看不懂英语了！\n");
+                $"妈妈再也不用担心我看不懂英语了！" +
+                $"查单词尚可，短语一言难尽\n").Append(hhdface);
 
             await SendGroupMessageModule.sendGroupAsync(messageReceiver, msg);
         }

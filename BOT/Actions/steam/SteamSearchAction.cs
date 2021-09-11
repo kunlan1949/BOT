@@ -103,12 +103,28 @@ namespace BOT.Actions.steam
                         //总评数
                         var evaCountParse = "//*[@class='user_reviews_summary_row'][2]/div/span[2]";
                         var evaCountNode = gameDoc.DocumentNode.SelectSingleNode(evaCountParse);
-                        evaCount = evaCountNode.InnerText.Replace("(", "").Replace(")", "");
+                        if (evaCountNode != null)
+                        {
+                            evaCount = evaCountNode.InnerText.Replace("(", "").Replace(")", "");
 
-                        //总评状态
-                        var evaStatusParse = "//*[@class='user_reviews_summary_row'][2]/div/span[1]";
-                        var evaStatusNode = gameDoc.DocumentNode.SelectSingleNode(evaStatusParse);
-                        evaStatus = evaStatusNode.InnerText;
+                            //总评状态
+                            var evaStatusParse = "//*[@class='user_reviews_summary_row'][2]/div/span[1]";
+                            var evaStatusNode = gameDoc.DocumentNode.SelectSingleNode(evaStatusParse);
+                            evaStatus = evaStatusNode.InnerText;
+                        }
+                        else
+                        {
+                            evaCountParse = "//*[@class='user_reviews_summary_row'][1]/div/span[2]";
+                            evaCountNode = gameDoc.DocumentNode.SelectSingleNode(evaCountParse);
+                            evaCount = evaCountNode.InnerText.Replace("(", "").Replace(")", "");
+
+                            //总评状态
+                            var evaStatusParse = "//*[@class='user_reviews_summary_row'][1]/div/span[1]";
+                            var evaStatusNode = gameDoc.DocumentNode.SelectSingleNode(evaStatusParse);
+                            evaStatus = evaStatusNode.InnerText;
+                        }
+
+                       
                     }
                     else
                     {

@@ -22,6 +22,8 @@ namespace BOT.Model
         public static string ADDADMIN = "/addadmin";
         public static string RMADMIN = "/rmadmin";
         //管理员关键字
+        public static string TEST = "/test";
+
         //开关机器人回应
         public static string SPEAK= "/speak";
 

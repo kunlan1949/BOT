@@ -1,4 +1,5 @@
 ﻿using BOT.Actions;
+using BOT.Actions.image;
 using BOT.Model;
 using BOT.Module.Send;
 using BOT.Utils;
@@ -100,6 +101,10 @@ namespace BOT.Handler
                     await errorAsync(messageReceiver, command);
                 }
 
+            }
+            else if (command.CommandType.Contains(CommandType.TEST))
+            {
+                await WebImageAction.TestAsync(command, messageReceiver, exec);
             }
             else
             { 

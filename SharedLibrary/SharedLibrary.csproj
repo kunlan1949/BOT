@@ -9,6 +9,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="poster\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="poster\res\img\headline.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="poster\res\img\middleImage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="poster\res\img\split.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="poster\style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Res\warning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

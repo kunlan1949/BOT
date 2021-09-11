@@ -185,6 +185,10 @@ namespace BOT.Helper
             {
                 commandType = CommandType.RMADMIN;
             }
+            else if (c[0].Contains(CommandType.TEST))
+            {
+                commandType = CommandType.TEST;
+            }
             else
             {
                 return null;
