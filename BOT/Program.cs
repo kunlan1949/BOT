@@ -43,7 +43,7 @@ namespace BOT
             };
 
             await bot.LaunchAsync().ContinueWith((e) => {
-                Console.WriteLine("启动成功");
+                Console.WriteLine("监听已开始");
 
             });
 

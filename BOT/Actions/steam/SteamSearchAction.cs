@@ -16,6 +16,7 @@ namespace BOT.Actions.steam
     {
         public static async Task<SteamInfoModel> GetValueAsync(string keyword)
         {
+            var info = new SteamInfoModel();
             ///
             /// 当前数量
             ///http://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1?appid=
@@ -24,28 +25,50 @@ namespace BOT.Actions.steam
             ///
             ///https://store.steampowered.com/search/?snr=1_4_4__12&term=
             ///
-
-            TimeConsumingCounter tcc = new TimeConsumingCounter();
-            tcc.Start();
-            var restResponse = searchRestAsync(keyword);
-            var mainDoc = doch(restResponse.Result.Content);
-            tcc.Over();
-            Console.WriteLine("html文档映射实体操作耗时" + tcc.Span());
-            tcc.Start();
-            var mainParse = "//*[@id='search_resultsRows']/a[1]";
-            var mainNode = mainDoc.DocumentNode.SelectSingleNode(mainParse);
             var mainUrl = "";
             var steamid = "";
-            if (mainNode != null)
+            TimeConsumingCounter tcc = new TimeConsumingCounter();
+           
+            if (RegUtil.IsUint(keyword))
             {
-                mainUrl = mainNode.Attributes["href"].Value;
-                steamid = mainNode.Attributes["data-ds-itemkey"].Value.Replace("App_","");
+                mainUrl = "https://store.steampowered.com/app/" + $"{keyword}";
+                Console.WriteLine("通过id查询");
+                steamid = keyword;
+                info = await getParamsAsync(mainUrl, steamid, tcc);
             }
             else
             {
-                return null;
+                tcc.Start();
+                var restResponse = searchRestAsync(keyword);
+                var mainDoc = doch(restResponse.Result.Content);
+                tcc.Over();
+                Console.WriteLine("html文档映射实体操作耗时" + tcc.Span());
+                tcc.Start();
+                var mainParse = "//*[@id='search_resultsRows']/a[1]";
+                var mainNode = mainDoc.DocumentNode.SelectSingleNode(mainParse);
+
+               
+                if (mainNode != null)
+                {
+                    mainUrl = mainNode.Attributes["href"].Value;
+                    steamid = mainNode.Attributes["data-ds-itemkey"].Value.Replace("App_", "");
+                }
+                else
+                {
+                    return null;
+                }
+                info = await getParamsAsync(mainUrl, steamid, tcc);
             }
+
+
             
+
+            // Console.WriteLine(response.Content);
+            return info;
+        }
+
+        private static async Task<SteamInfoModel> getParamsAsync(string mainUrl,string steamid, TimeConsumingCounter tcc)
+        {
             var info = new SteamInfoModel();
             if (mainUrl != "")
             {
@@ -69,7 +92,12 @@ namespace BOT.Actions.steam
                 //内容简介
                 var descParse = "//*[@class='game_description_snippet']";
                 var descNode = gameDoc.DocumentNode.SelectSingleNode(descParse);
-                var desc = descNode.InnerText;
+
+                var desc = "无";
+                if (descNode != null)
+                {
+                    desc = descNode.InnerText;
+                }
 
                 //名字
                 var nameParse = "//*[@id='appHubAppName']";
@@ -124,7 +152,7 @@ namespace BOT.Actions.steam
                             evaStatus = evaStatusNode.InnerText;
                         }
 
-                       
+
                     }
                     else
                     {
@@ -147,9 +175,9 @@ namespace BOT.Actions.steam
                 var bdcPriceParse = "//*[@class='game_area_purchase_game_wrapper']//*[@class='game_purchase_action_bg']//*[@class='discount_prices']/div[1]";
                 //打折后价格
                 var dcPriceParse = "//*[@class='game_area_purchase_game_wrapper']//*[@class='game_purchase_action_bg']//*[@class='discount_prices']/div[2]";
-                 
-                var dcPercentNode  = gameDoc.DocumentNode.SelectSingleNode(dcPercentParse);
-               
+
+                var dcPercentNode = gameDoc.DocumentNode.SelectSingleNode(dcPercentParse);
+
                 var disCountPercent = "";
                 var bdcPrice = "";
                 var dcPrice = "";
@@ -177,7 +205,7 @@ namespace BOT.Actions.steam
                 {
                     price = "暂未发售";
                 }
-                var online ="";
+                var online = "";
                 if (nPriceNode != null)
                 {
                     string onlineRe = HttpApi.HttpGet("http://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1?appid=" + $"{steamid}");
@@ -190,7 +218,7 @@ namespace BOT.Actions.steam
                 }
 
 
-               
+
 
                 if (isDisCount)
                 {
@@ -226,9 +254,8 @@ namespace BOT.Actions.steam
                 }
                 tcc.Over();
                 Console.WriteLine("解析操作耗时" + tcc.Span());
-
+              
             }
-            // Console.WriteLine(response.Content);
             return info;
         }
 
@@ -267,6 +294,12 @@ namespace BOT.Actions.steam
             request.Timeout = 10000;
             request.AddHeader("Cache-Control", "no-cache");
             request.AddHeader("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
+
+            //年龄验证
+            request.AddCookie("birthtime", "880905601");
+            //中国时区
+            request.AddCookie("timezoneOffset", "28800");
+            //使用语言、所在地区
             request.AddCookie("steamCountry", "CN%7C0e015ace9689da9b25f08ce692633073");
             var response = await client.ExecuteAsync(request);
             return response;

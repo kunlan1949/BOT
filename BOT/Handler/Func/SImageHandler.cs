@@ -167,6 +167,7 @@ namespace BOT.Handler.Func
             else
             {
                 await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, "请发送您想要查找的图片!", false);
+                
             }
 
         }
