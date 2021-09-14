@@ -17,6 +17,7 @@ using Db.Bot;
 using BOT.Action;
 using BOT.Actions;
 using Mirai.Net.Utils.Scaffolds;
+using static BOT.Model.TypeHelper;
 
 namespace BOT.Module
 {
@@ -76,19 +77,33 @@ namespace BOT.Module
                     }
                     else
                     {
-                        Console.WriteLine($"{message.Text}");
-                        var i = receiver.MessageChain.WhereAndCast<ImageMessage>();
-                        if (i.Length > 0)
-                        {
-                            Console.WriteLine(i[0].Url);
-                        }
+                        
 
                     }
                     tcc.Over();
                     Console.WriteLine("操作耗时" + tcc.Span());
-
                 }
-                //await receiver.SendGroupMessage("Hello, World".Append());
+                foreach (var message in receiver.MessageChain.WhereAndCast<ImageMessage>())
+                {
+
+                    if (receiver.MessageChain.WhereAndCast<PlainMessage>().Length <= 0)
+                    {
+                        var member = Members.Find(Members._.MemQq == receiver.Sender.Id & Members._.MemGroup == receiver.Sender.Group.Id);
+                        if (member != null)
+                        {
+                            if (member.MissionId != "")
+                            {
+                                await MissionHelper.SelectTypeAsync(member, receiver);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(message.Url);
+                        }
+                    }
+                    
+                }
+                    //await receiver.SendGroupMessage("Hello, World".Append());
             }
         }
     }

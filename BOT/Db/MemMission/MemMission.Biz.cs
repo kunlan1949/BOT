@@ -26,14 +26,14 @@ using XCode.Membership;
 namespace Db.Bot
 {
     /// <summary></summary>
-    public partial class Members : Entity<Members>
+    public partial class MemMission : Entity<MemMission>
     {
         #region 对象操作
-        static Members()
+        static MemMission()
         {
             // 累加字段，生成 Update xx Set Count=Count+1234 Where xxx
             //var df = Meta.Factory.AdditionalFields;
-            //df.Add(nameof(MemExist));
+            //df.Add(nameof(MType));
 
             // 过滤器 UserModule、TimeModule、IPModule
         }
@@ -46,8 +46,11 @@ namespace Db.Bot
             if (!HasDirty) return;
 
             // 这里验证参数范围，建议抛出参数异常，指定参数名，前端用户界面可以捕获参数异常并聚焦到对应的参数输入框
-            if (MemGroup.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MemGroup), "成员所属群组号不能为空！");
-            if (MemQq.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MemQq), "成员QQ号不能为空！");
+            if (MId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MId), "随机32位任务码不能为空！");
+            if (MGroup.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MGroup), "发起的群号不能为空！");
+            if (MCreateMember.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MCreateMember), "创建者QQ号不能为空！");
+            if (MCreateTime.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MCreateTime), "创建时间不能为空！");
+            if (MFinishTime.IsNullOrEmpty()) throw new ArgumentNullException(nameof(MFinishTime), "结束时间不能为空！");
 
             // 建议先调用基类方法，基类方法会做一些统一处理
             base.Valid(isNew);
@@ -62,25 +65,28 @@ namespace Db.Bot
         //    // InitData一般用于当数据表没有数据时添加一些默认数据，该实体类的任何第一次数据库操作都会触发该方法，默认异步调用
         //    if (Meta.Session.Count > 0) return;
 
-        //    if (XTrace.Debug) XTrace.WriteLine("开始初始化Members[Members]数据……");
+        //    if (XTrace.Debug) XTrace.WriteLine("开始初始化MemMission[MemMission]数据……");
 
-        //    var entity = new Members();
-        //    entity.MemIdx = 0;
-        //    entity.MemGroup = "abc";
-        //    entity.MemExist = 0;
-        //    entity.MemNicknumber = "abc";
-        //    entity.MemQq = "abc";
-        //    entity.MemLimit = 0;
-        //    entity.SimageLimit = 0;
-        //    entity.ImgTime = "abc";
-        //    entity.MissionId = "abc";
-        //    entity.MemPoint = 0;
-        //    entity.MemLottery = "abc";
-        //    entity.MemLotteryId = "abc";
-        //    entity.MemWarnC = 0;
+        //    var entity = new MemMission();
+        //    entity.MIdx = 0;
+        //    entity.MId = "abc";
+        //    entity.MType = 0;
+        //    entity.MTypeAux = 0;
+        //    entity.MGroup = "abc";
+        //    entity.MCreateMember = "abc";
+        //    entity.MCreateTime = "abc";
+        //    entity.MFinishTime = "abc";
+        //    entity.MFinished = 0;
+        //    entity.MDataDesc = "abc";
+        //    entity.MData1 = "abc";
+        //    entity.MData2 = "abc";
+        //    entity.MData3 = "abc";
+        //    entity.MData4 = "abc";
+        //    entity.MData5 = "abc";
+        //    entity.MData6 = "abc";
         //    entity.Insert();
 
-        //    if (XTrace.Debug) XTrace.WriteLine("完成初始化Members[Members]数据！");
+        //    if (XTrace.Debug) XTrace.WriteLine("完成初始化MemMission[MemMission]数据！");
         //}
 
         ///// <summary>已重载。基类先调用Valid(true)验证数据，然后在事务保护内调用OnInsert</summary>
@@ -102,27 +108,27 @@ namespace Db.Bot
         #endregion
 
         #region 扩展查询
-        /// <summary>根据自增查找</summary>
-        /// <param name="memIdx">自增</param>
+        /// <summary>根据自增idx查找</summary>
+        /// <param name="mIdx">自增idx</param>
         /// <returns>实体对象</returns>
-        public static Members FindByMemIdx(Int32 memIdx)
+        public static MemMission FindByMIdx(Int32 mIdx)
         {
-            if (memIdx <= 0) return null;
+            if (mIdx <= 0) return null;
 
             // 实体缓存
-            if (Meta.Session.Count < 1000) return Meta.Cache.Find(e => e.MemIdx == memIdx);
+            if (Meta.Session.Count < 1000) return Meta.Cache.Find(e => e.MIdx == mIdx);
 
             // 单对象缓存
-            return Meta.SingleCache[memIdx];
+            return Meta.SingleCache[mIdx];
 
-            //return Find(_.MemIdx == memIdx);
+            //return Find(_.MIdx == mIdx);
         }
         #endregion
 
         #region 高级查询
 
-        // Select Count(MemIdx) as MemIdx,Category From members Where CreateTime>'2020-01-24 00:00:00' Group By Category Order By MemIdx Desc limit 20
-        //static readonly FieldCache<Members> _CategoryCache = new FieldCache<Members>(nameof(Category))
+        // Select Count(MIdx) as MIdx,Category From mem_mission Where CreateTime>'2020-01-24 00:00:00' Group By Category Order By MIdx Desc limit 20
+        //static readonly FieldCache<MemMission> _CategoryCache = new FieldCache<MemMission>(nameof(Category))
         //{
         //Where = _.CreateTime > DateTime.Today.AddDays(-30) & Expression.Empty
         //};

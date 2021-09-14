@@ -66,28 +66,28 @@ namespace Db.Bot
         public Int32 MemLimit { get => _MemLimit; set { if (OnPropertyChanging("MemLimit", value)) { _MemLimit = value; OnPropertyChanged("MemLimit"); } } }
 
         private Int32 _SimageLimit;
-        /// <summary>每日识别次数</summary>
-        [DisplayName("每日识别次数")]
-        [Description("每日识别次数")]
+        /// <summary>每日识图次数</summary>
+        [DisplayName("每日识图次数")]
+        [Description("每日识图次数")]
         [DataObjectField(false, false, true, 255)]
-        [BindColumn("sImage_limit", "每日识别次数", "int(255)")]
+        [BindColumn("sImage_limit", "每日识图次数", "int(255)")]
         public Int32 SimageLimit { get => _SimageLimit; set { if (OnPropertyChanging("SimageLimit", value)) { _SimageLimit = value; OnPropertyChanged("SimageLimit"); } } }
 
         private String _ImgTime;
-        /// <summary>最后一次机会识图的时间</summary>
-        [DisplayName("最后一次机会识图的时间")]
-        [Description("最后一次机会识图的时间")]
+        /// <summary>识图的时间</summary>
+        [DisplayName("识图的时间")]
+        [Description("识图的时间")]
         [DataObjectField(false, false, true, 255)]
-        [BindColumn("img_time", "最后一次机会识图的时间", "varchar(255)")]
+        [BindColumn("img_time", "识图的时间", "varchar(255)")]
         public String ImgTime { get => _ImgTime; set { if (OnPropertyChanging("ImgTime", value)) { _ImgTime = value; OnPropertyChanged("ImgTime"); } } }
 
-        private Int32 _SImg;
-        /// <summary>是否正在进行识图</summary>
-        [DisplayName("是否正在进行识图")]
-        [Description("是否正在进行识图")]
+        private String _MissionId;
+        /// <summary>任务id</summary>
+        [DisplayName("任务id")]
+        [Description("任务id")]
         [DataObjectField(false, false, true, 255)]
-        [BindColumn("s_img", "是否正在进行识图", "int(255)")]
-        public Int32 SImg { get => _SImg; set { if (OnPropertyChanging("SImg", value)) { _SImg = value; OnPropertyChanged("SImg"); } } }
+        [BindColumn("mission_id", "任务id", "varchar(255)")]
+        public String MissionId { get => _MissionId; set { if (OnPropertyChanging("MissionId", value)) { _MissionId = value; OnPropertyChanged("MissionId"); } } }
 
         private Int32 _MemPoint;
         /// <summary>成员积分</summary>
@@ -140,7 +140,7 @@ namespace Db.Bot
                     case "MemLimit": return _MemLimit;
                     case "SimageLimit": return _SimageLimit;
                     case "ImgTime": return _ImgTime;
-                    case "SImg": return _SImg;
+                    case "MissionId": return _MissionId;
                     case "MemPoint": return _MemPoint;
                     case "MemLottery": return _MemLottery;
                     case "MemLotteryId": return _MemLotteryId;
@@ -160,7 +160,7 @@ namespace Db.Bot
                     case "MemLimit": _MemLimit = value.ToInt(); break;
                     case "SimageLimit": _SimageLimit = value.ToInt(); break;
                     case "ImgTime": _ImgTime = Convert.ToString(value); break;
-                    case "SImg": _SImg = value.ToInt(); break;
+                    case "MissionId": _MissionId = Convert.ToString(value); break;
                     case "MemPoint": _MemPoint = value.ToInt(); break;
                     case "MemLottery": _MemLottery = Convert.ToString(value); break;
                     case "MemLotteryId": _MemLotteryId = Convert.ToString(value); break;
@@ -193,14 +193,14 @@ namespace Db.Bot
             /// <summary>成员权限</summary>
             public static readonly Field MemLimit = FindByName("MemLimit");
 
-            /// <summary>每日识别次数</summary>
+            /// <summary>每日识图次数</summary>
             public static readonly Field SimageLimit = FindByName("SimageLimit");
 
-            /// <summary>最后一次机会识图的时间</summary>
+            /// <summary>识图的时间</summary>
             public static readonly Field ImgTime = FindByName("ImgTime");
 
-            /// <summary>是否正在进行识图</summary>
-            public static readonly Field SImg = FindByName("SImg");
+            /// <summary>任务id</summary>
+            public static readonly Field MissionId = FindByName("MissionId");
 
             /// <summary>成员积分</summary>
             public static readonly Field MemPoint = FindByName("MemPoint");
@@ -238,14 +238,14 @@ namespace Db.Bot
             /// <summary>成员权限</summary>
             public const String MemLimit = "MemLimit";
 
-            /// <summary>每日识别次数</summary>
+            /// <summary>每日识图次数</summary>
             public const String SimageLimit = "SimageLimit";
 
-            /// <summary>最后一次机会识图的时间</summary>
+            /// <summary>识图的时间</summary>
             public const String ImgTime = "ImgTime";
 
-            /// <summary>是否正在进行识图</summary>
-            public const String SImg = "SImg";
+            /// <summary>任务id</summary>
+            public const String MissionId = "MissionId";
 
             /// <summary>成员积分</summary>
             public const String MemPoint = "MemPoint";

@@ -13,5 +13,14 @@ namespace BOT.Model
             GROUP = 0,
             PERSON = 1
         }
+
+
+        public enum MissionType
+        {
+            SIMAGE = 0,
+            XXXXX = 1
+        }
+
+        
     }
 }

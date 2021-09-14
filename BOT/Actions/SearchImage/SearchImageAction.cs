@@ -49,31 +49,38 @@ namespace BOT.Actions.SearchImage
                 length = mainNode.Count;
             }
             var imageInfoList = new List<ImageModel>();
-            var locationParse = "//*[@class='detail-box gray-link']/h6/small";
-            var imageUrlParse = "/div/img";
-            var imageDetailParse = "//*[@class='detail-box gray-link']/h6/a[1]";
-            var imageAuthorParse = "//*[@class='detail-box gray-link']/h6/a[2]";
+        
 
-            //var locationParse = "//*[@class='detail - box gray - link']/h6/small";
             for (int i = 1; i < length; i++)
             {
+                var locationParse = "//*[@class='detail-box gray-link']/h6/small";
+                var imageUrlParse = "/div/img";
+                var imageDetailParse = "//*[@class='detail-box gray-link']/h6/a[1]";
+                var imageAuthorParse = "//*[@class='detail-box gray-link']/h6/a[2]";
+
                 var nc = doch(mainNode[i].InnerHtml);
 
                 var imageUrlNode = nc.DocumentNode.SelectSingleNode(imageUrlParse);
                 var locationNode = nc.DocumentNode.SelectSingleNode(locationParse);
                 var imageAuthorNode = nc.DocumentNode.SelectSingleNode(imageAuthorParse);
                 var imageDetailNode = nc.DocumentNode.SelectSingleNode(imageDetailParse);
-                var location = "";
+
+                var location = "不存在";
+
                 if (locationNode !=null)
                 {
                     location = locationNode.InnerText;
                 }
                 else
                 {
-                    location = "不存在";
+                    locationParse = "//*[@class='external']/small";
+                    locationNode = nc.DocumentNode.SelectSingleNode(locationParse);
+                    location = locationNode.InnerText;
                 }
-                var imageAuthorUrl = "";
-                var authorName = "";
+
+
+                var imageAuthorUrl = "不存在";
+                var authorName = "未知";
                 if (imageAuthorNode != null)
                 {
                     imageAuthorUrl = imageAuthorNode.Attributes["href"].Value;
@@ -81,12 +88,28 @@ namespace BOT.Actions.SearchImage
                 }
                 else
                 {
-                    imageAuthorUrl = "不存在";
-                    authorName = "未知";
+                    imageAuthorParse = "//*[@class='external']/a[2]";
+                    imageAuthorNode = nc.DocumentNode.SelectSingleNode(imageAuthorParse);
+                    authorName = imageAuthorNode.InnerText;
+                    imageAuthorUrl = imageAuthorNode.Attributes["href"].Value;
                 }
-                
-                var imageName = imageDetailNode.InnerText;
-                var imageDetailUrl = imageDetailNode.Attributes["href"].Value;
+
+                var imageName = "";
+                var imageDetailUrl = "";
+                if (imageDetailNode != null)
+                {
+                    imageName = imageDetailNode.InnerText;
+                    imageDetailUrl = imageDetailNode.Attributes["href"].Value;
+                }
+                else
+                {
+                    imageDetailParse = "//*[@class='external']/a[1]";
+                    imageDetailNode= nc.DocumentNode.SelectSingleNode(imageDetailParse);
+                    imageName = imageDetailNode.InnerText;
+                    imageDetailUrl = imageDetailNode.Attributes["href"].Value;
+                }
+
+
                 var imageUrl = imageUrlNode.Attributes["src"].Value;
 
                 if (locationNode != null)

@@ -31,7 +31,7 @@ namespace BOT.Handler
             {
                 exist_m = false;
             }
-
+            
             #region 存在注册成员
             if (exist_m)
             {
@@ -409,7 +409,6 @@ namespace BOT.Handler
                             nm.MemLimit = 5;
                             nm.SimageLimit = 5;
                             nm.ImgTime = UtilHelper.GetTimeUnix().ToString();
-                            nm.SImg = 0;
                             nm.MemQq = messageReceiver.Sender.Id;
                             nm.Insert();
                             var num = g.GrpNumber;
