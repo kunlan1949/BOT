@@ -122,20 +122,30 @@ namespace BOT.Handler.Func
                     await SearchImageAction.imgAsync(image[0].Url).ContinueWith(async (e) =>
                     {
                         var imageInfoList = e.Result;
-                        var loca = imgLocationTrans(imageInfoList.First().ImageLocation);
-                        msg = "".Append("识图信息来源：【ASCII2D】\n")
-                        .Append(new ImageMessage() { Url = imageInfoList.First().PreImageUrl, Type = Messages.Image })
-                        .Append($"作者:{imageInfoList.First().AuthorName}\n")
-                        .Append($"作者链接:{imageInfoList.First().ImageAuthorUrl}\n")
-                        .Append($"作品名:{imageInfoList.First().ImageName}\n")
-                        .Append($"作品详情链接:{imageInfoList.First().DetailUrl}\n")
-                        .Append($"出处:{loca}\n")
-                        .Append($"作品有可能同时出现在Pixiv和Twitter上，\n本查询优先展示Twitter\n")
-                        .Append($"您的本日查询次数剩余 {mem.SimageLimit} 次\n次数会在每日凌晨更新!\n");
-                        await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, msg, false);
-                        MissionHelper.endMission(mem, mem.MissionId);
-                        //修改数据库
-                        memSetDB(mem, false);
+                        if (imageInfoList != null)
+                        {
+                            var loca = imgLocationTrans(imageInfoList.First().ImageLocation);
+                            msg = "".Append("识图信息来源：【ASCII2D】\n")
+                            .Append(new ImageMessage() { Url = imageInfoList.First().PreImageUrl, Type = Messages.Image })
+                            .Append($"作者:{imageInfoList.First().AuthorName}\n")
+                            .Append($"作者链接:{imageInfoList.First().ImageAuthorUrl}\n")
+                            .Append($"作品名:{imageInfoList.First().ImageName}\n")
+                            .Append($"作品详情链接:{imageInfoList.First().DetailUrl}\n")
+                            .Append($"出处:{loca}\n")
+                            .Append($"作品有可能同时出现在Pixiv和Twitter上，\n本查询优先展示Twitter\n")
+                            .Append($"您的本日查询次数剩余 {mem.SimageLimit} 次\n次数会在每日凌晨更新!\n");
+                            await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, msg, false);
+                            MissionHelper.endMission(mem, mem.MissionId);
+                            //修改数据库
+                            memSetDB(mem, false);
+                        }
+                        else
+                        {
+                            await SendGroupMessageModule.sendGroupAtAsync(messageReceiver, "图片未能找到对应结果，请使用模糊查询", false);
+                            MissionHelper.endMission(mem, mem.MissionId);
+                            //修改数据库
+                            memSetDB(mem, false);
+                        }
                     });
                 }
                 else

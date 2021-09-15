@@ -40,14 +40,22 @@ namespace BOT.Actions.SearchImage
             var mainParse = "//*[@class='row item-box']";
             var mainNode = htmldoc.DocumentNode.SelectNodes(mainParse);
             var length = 0;
-            if (mainNode.Count > 3)
+            if (mainNode != null)
             {
-                length = 3;
+                if (mainNode.Count > 3)
+                {
+                    length = 3;
+                }
+                else
+                {
+                    length = mainNode.Count;
+                }
             }
             else
             {
-                length = mainNode.Count;
+                return null;
             }
+          
             var imageInfoList = new List<ImageModel>();
         
 
