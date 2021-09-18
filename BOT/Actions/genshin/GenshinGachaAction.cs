@@ -36,22 +36,13 @@ namespace BOT.Actions.genshin
             {
                 rowNumber = 2;
                 gacha = getResidentGacha(false, true);
-                if (gacha.type == 0)
-                {
-                    gen.ResidentRole5 += 1;
-                    gen.PortectRole += 1;
-                }
-                else
-                {
-                    gen.ResidentWeapon5 += 1;
-                    gen.PortectWeapon += 1;
-                }
-                gen.Update();
+                GenshinDataAction.Role5Mark(gen,gacha);
                 list.Add(gacha);
             }
 
             //四星低保
             gacha = getResidentGacha(true, false);
+            GenshinDataAction.Role4Mark(gen, gacha);
             list.Add(gacha);
 
             for (; rowNumber < rowLength; rowNumber++)
@@ -63,8 +54,16 @@ namespace BOT.Actions.genshin
                     //重置低保计次
                     gen.ResidentCount = 0;
                     gen.ResidentProtect5 = 0;
-                    gen.Update();
                 }
+                else if(gacha.level == 4)
+                {
+                    gen.ResidentWeapon4 += 1;
+                }
+                else
+                {
+                    gen.ResidentWeapon3 += 1;
+                }
+                gen.Update();
                 list.Add(gacha);
             }
             return list;

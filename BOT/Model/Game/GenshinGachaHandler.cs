@@ -64,9 +64,6 @@ namespace BOT.Model.Game
                         resultList = GenshinGachaAction.residentGachaTen(Gen, false);
                     }
 
-                  
-
-
                     var star5 = 0;
                     var star4 = 0;
                     var rWeapon5 = 0;
@@ -81,23 +78,23 @@ namespace BOT.Model.Game
                         {
                             if (result.type == 0)
                             {
-                                rWeapon5 += 1;
-                                weapon5List.Add(result.value);
+                                rRole5 += 1;
                             }
                             else
                             {
-                                rRole5 += 1;
+                                rWeapon5 += 1;
+                                weapon5List.Add(result.value);
                             }
                         }
                         else if (result.level == 4)
                         {
                             if (result.type == 0)
                             {
-                                rWeapon4 += 1;
+                                rRole4 += 1;
                             }
                             else
                             {
-                                rRole4 += 1;
+                                rWeapon4 += 1;
                             }
                         }
                         else if (result.level == 3)
@@ -111,7 +108,7 @@ namespace BOT.Model.Game
                     star4 = rWeapon4 + rRole4;
                     MessageBase[] msg = { };
 
-                    var star5Msg = $"出货啦！你获得了【{genStar5List(weapon5List)}】";
+                    var star5Msg = $"{genStar5List(weapon5List)}";
                     var loser = $"";
                     if (isProtect)
                     {
@@ -135,8 +132,9 @@ namespace BOT.Model.Game
         private static string genStar5List(List<string> resultList)
         {
             var re = "";
-            if (resultList != null)
+            if (resultList.Count>0)
             {
+                re = "出货啦！你获得了";
                 foreach (var result in resultList)
                 {
                     re += $"【{result}】 ";
