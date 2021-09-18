@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BOT.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,10 @@ namespace BOT.Model
         public static string CHENGYU = "成语接龙";
         public static string SIMAGE = "识图";
         public static string FORHELP = "帮助";
+
+        public static string GACHA = "奔行世间";
+        public static string WGACHA = "神铸赋形";
+        public static string RGACHA = ConfigHelper.GRoleName();
         public static Dictionary<string, int> Sign = new Dictionary<string, int>
         {
             {"白羊", 0},

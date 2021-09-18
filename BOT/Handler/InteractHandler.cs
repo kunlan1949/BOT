@@ -385,6 +385,13 @@ namespace BOT.Handler
                     await TwentyOneHandler.startAsync(mem, g, command, messageReceiver);
                 }
                 #endregion
+
+                #region 原神祈愿
+                else if (command.CommandType.Contains(CommandType.GENSHIN))
+                {
+                    await GenshinGachaHandler.startAsync(mem, g, command, messageReceiver);
+                }
+                #endregion
             }
             #endregion
 

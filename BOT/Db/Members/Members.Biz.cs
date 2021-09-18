@@ -70,6 +70,7 @@ namespace Db.Bot
         //    entity.MemExist = 0;
         //    entity.MemNicknumber = "abc";
         //    entity.MemQq = "abc";
+        //    entity.MemSignTime = "abc";
         //    entity.MemLimit = 0;
         //    entity.SimageLimit = 0;
         //    entity.ImgTime = "abc";

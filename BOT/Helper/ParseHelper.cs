@@ -89,6 +89,11 @@ namespace BOT.Helper
                 needParam = false;
                 commandType = CommandType.SGAME;
             }
+            else if (c[0].Contains(CommandType.GENSHIN))
+            {
+                needParam = false;
+                commandType = CommandType.GENSHIN;
+            }
             else
             {
                 return null;

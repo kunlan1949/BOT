@@ -40,6 +40,7 @@ namespace BOT.Model
         public static string LUCKY = "运势";
         public static string TRANS = "翻译";
         public static string SGAME = "查游戏";
+        public static string GENSHIN = "祈愿";
 
         ///增加复读关键字
         ///【/copyread [你好,早上好]】

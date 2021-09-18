@@ -199,7 +199,6 @@ namespace BOT.Handler.Func
                 MissionHelper.endMission(mem, mem.MissionId);
                 //修改数据库
                 memSetDB(mem, false);
-
             }
             
             else

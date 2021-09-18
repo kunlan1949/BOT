@@ -57,6 +57,14 @@ namespace Db.Bot
         [BindColumn("mem_QQ", "成员QQ号", "varchar(255)")]
         public String MemQq { get => _MemQq; set { if (OnPropertyChanging("MemQq", value)) { _MemQq = value; OnPropertyChanged("MemQq"); } } }
 
+        private String _MemSignTime;
+        /// <summary>签到时间</summary>
+        [DisplayName("签到时间")]
+        [Description("签到时间")]
+        [DataObjectField(false, false, true, 255)]
+        [BindColumn("mem_sign_time", "签到时间", "varchar(255)")]
+        public String MemSignTime { get => _MemSignTime; set { if (OnPropertyChanging("MemSignTime", value)) { _MemSignTime = value; OnPropertyChanged("MemSignTime"); } } }
+
         private Int32 _MemLimit;
         /// <summary>成员权限</summary>
         [DisplayName("成员权限")]
@@ -82,11 +90,11 @@ namespace Db.Bot
         public String ImgTime { get => _ImgTime; set { if (OnPropertyChanging("ImgTime", value)) { _ImgTime = value; OnPropertyChanged("ImgTime"); } } }
 
         private String _MissionId;
-        /// <summary>任务id</summary>
-        [DisplayName("任务id")]
-        [Description("任务id")]
+        /// <summary>任务ID</summary>
+        [DisplayName("任务ID")]
+        [Description("任务ID")]
         [DataObjectField(false, false, true, 255)]
-        [BindColumn("mission_id", "任务id", "varchar(255)")]
+        [BindColumn("mission_id", "任务ID", "varchar(255)")]
         public String MissionId { get => _MissionId; set { if (OnPropertyChanging("MissionId", value)) { _MissionId = value; OnPropertyChanged("MissionId"); } } }
 
         private Int32 _MemPoint;
@@ -137,6 +145,7 @@ namespace Db.Bot
                     case "MemExist": return _MemExist;
                     case "MemNicknumber": return _MemNicknumber;
                     case "MemQq": return _MemQq;
+                    case "MemSignTime": return _MemSignTime;
                     case "MemLimit": return _MemLimit;
                     case "SimageLimit": return _SimageLimit;
                     case "ImgTime": return _ImgTime;
@@ -157,6 +166,7 @@ namespace Db.Bot
                     case "MemExist": _MemExist = value.ToInt(); break;
                     case "MemNicknumber": _MemNicknumber = Convert.ToString(value); break;
                     case "MemQq": _MemQq = Convert.ToString(value); break;
+                    case "MemSignTime": _MemSignTime = Convert.ToString(value); break;
                     case "MemLimit": _MemLimit = value.ToInt(); break;
                     case "SimageLimit": _SimageLimit = value.ToInt(); break;
                     case "ImgTime": _ImgTime = Convert.ToString(value); break;
@@ -190,6 +200,9 @@ namespace Db.Bot
             /// <summary>成员QQ号</summary>
             public static readonly Field MemQq = FindByName("MemQq");
 
+            /// <summary>签到时间</summary>
+            public static readonly Field MemSignTime = FindByName("MemSignTime");
+
             /// <summary>成员权限</summary>
             public static readonly Field MemLimit = FindByName("MemLimit");
 
@@ -199,7 +212,7 @@ namespace Db.Bot
             /// <summary>识图的时间</summary>
             public static readonly Field ImgTime = FindByName("ImgTime");
 
-            /// <summary>任务id</summary>
+            /// <summary>任务ID</summary>
             public static readonly Field MissionId = FindByName("MissionId");
 
             /// <summary>成员积分</summary>
@@ -235,6 +248,9 @@ namespace Db.Bot
             /// <summary>成员QQ号</summary>
             public const String MemQq = "MemQq";
 
+            /// <summary>签到时间</summary>
+            public const String MemSignTime = "MemSignTime";
+
             /// <summary>成员权限</summary>
             public const String MemLimit = "MemLimit";
 
@@ -244,7 +260,7 @@ namespace Db.Bot
             /// <summary>识图的时间</summary>
             public const String ImgTime = "ImgTime";
 
-            /// <summary>任务id</summary>
+            /// <summary>任务ID</summary>
             public const String MissionId = "MissionId";
 
             /// <summary>成员积分</summary>
