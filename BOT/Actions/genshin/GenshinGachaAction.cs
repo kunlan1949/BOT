@@ -15,10 +15,50 @@ namespace BOT.Actions.genshin
         public static string splitWord = "|";
 
 
-        public static List<GachaValueReturn> residentGachaOne()
+        public static List<GachaValueReturn> residentGachaOne(Genshin gen)
         {
             List<GachaValueReturn> list = new();
-            var gacha = getResidentGacha(false, false);
+            GenshinDataAction.ResidentOneMark(gen);
+            GachaValueReturn gacha;
+
+            //四五星保底
+            if (gen.Resident4Count / 10 >= 1 && gen.Resident5Count / 20 >= 1)
+            {
+                gacha= getResidentGacha(true, true);
+                GenshinDataAction.Role4Mark(gen, gacha);
+                GenshinDataAction.Role5Mark(gen, gacha,true);
+            }
+            //四星保底
+            else if (gen.Resident4Count / 10 >= 1)
+            {
+                gacha = getResidentGacha(true, false);
+                GenshinDataAction.Role4Mark(gen, gacha);
+            }
+            //五星保底
+            else if (gen.Resident5Count / 20 >= 1)
+            {
+                gacha = getResidentGacha(false, true);
+                GenshinDataAction.Role5Mark(gen, gacha, true);
+            }
+            else
+            {
+                gacha = getResidentGacha(false, false);
+                if (gacha.level == 5)
+                {
+                    //重置低保计次
+                    GenshinDataAction.Role5Mark(gen, gacha, false);
+                }
+                else if (gacha.level == 4)
+                {
+                    GenshinDataAction.Role4Mark(gen, gacha);
+                }
+                else
+                {
+                    gen.ResidentWeapon3 += 1;
+                    gen.Update();
+                }
+            }
+
             list.Add(gacha);
             return list;
         }
@@ -36,7 +76,8 @@ namespace BOT.Actions.genshin
             {
                 rowNumber = 2;
                 gacha = getResidentGacha(false, true);
-                GenshinDataAction.Role5Mark(gen,gacha);
+                //重置低保计数
+                GenshinDataAction.Role5Mark(gen,gacha,true);
                 list.Add(gacha);
             }
 
@@ -52,12 +93,11 @@ namespace BOT.Actions.genshin
                 if (gacha.level == 5)
                 {
                     //重置低保计次
-                    gen.ResidentCount = 0;
-                    gen.ResidentProtect5 = 0;
+                    GenshinDataAction.Role5Mark(gen, gacha,false);
                 }
                 else if(gacha.level == 4)
                 {
-                    gen.ResidentWeapon4 += 1;
+                    GenshinDataAction.Role4Mark(gen, gacha);
                 }
                 else
                 {

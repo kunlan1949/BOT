@@ -58,45 +58,53 @@ namespace Db.Bot
         [BindColumn("intertwined_fate", "纠缠之源数量", "int(255)")]
         public Int32 IntertwinedFate { get => _IntertwinedFate; set { if (OnPropertyChanging("IntertwinedFate", value)) { _IntertwinedFate = value; OnPropertyChanged("IntertwinedFate"); } } }
 
-        private Int32 _ResidentProtect5;
-        /// <summary>是否可以触发常驻五星保底（抽中五星失效）</summary>
-        [DisplayName("是否可以触发常驻五星保底")]
-        [Description("是否可以触发常驻五星保底（抽中五星失效）")]
-        [DataObjectField(false, false, false, 255)]
-        [BindColumn("resident_protect5", "是否可以触发常驻五星保底（抽中五星失效）", "int(255)")]
-        public Int32 ResidentProtect5 { get => _ResidentProtect5; set { if (OnPropertyChanging("ResidentProtect5", value)) { _ResidentProtect5 = value; OnPropertyChanged("ResidentProtect5"); } } }
+        private Int32 _Resident5Count;
+        /// <summary>抽取的常驻池五星次数（低保用）</summary>
+        [DisplayName("抽取的常驻池五星次数")]
+        [Description("抽取的常驻池五星次数（低保用）")]
+        [DataObjectField(false, false, true, 255)]
+        [BindColumn("resident5_count", "抽取的常驻池五星次数（低保用）", "int(255)")]
+        public Int32 Resident5Count { get => _Resident5Count; set { if (OnPropertyChanging("Resident5Count", value)) { _Resident5Count = value; OnPropertyChanged("Resident5Count"); } } }
 
-        private Int32 _Weapon5Protect5;
-        /// <summary>是否可以触发武器池五星保底（抽中五星失效）</summary>
-        [DisplayName("是否可以触发武器池五星保底")]
-        [Description("是否可以触发武器池五星保底（抽中五星失效）")]
-        [DataObjectField(false, false, false, 255)]
-        [BindColumn("weapon5_protect5", "是否可以触发武器池五星保底（抽中五星失效）", "int(255)")]
-        public Int32 Weapon5Protect5 { get => _Weapon5Protect5; set { if (OnPropertyChanging("Weapon5Protect5", value)) { _Weapon5Protect5 = value; OnPropertyChanged("Weapon5Protect5"); } } }
+        private Int32 _Resident4Count;
+        /// <summary>抽取的常驻池四星次数（低保用）</summary>
+        [DisplayName("抽取的常驻池四星次数")]
+        [Description("抽取的常驻池四星次数（低保用）")]
+        [DataObjectField(false, false, true, 255)]
+        [BindColumn("resident4_count", "抽取的常驻池四星次数（低保用）", "int(255)")]
+        public Int32 Resident4Count { get => _Resident4Count; set { if (OnPropertyChanging("Resident4Count", value)) { _Resident4Count = value; OnPropertyChanged("Resident4Count"); } } }
 
-        private Int32 _Weapon5Protect5Up;
-        /// <summary>是否可以触发武器池Up五星保底（抽中Up五星失效）</summary>
-        [DisplayName("是否可以触发武器池Up五星保底")]
-        [Description("是否可以触发武器池Up五星保底（抽中Up五星失效）")]
-        [DataObjectField(false, false, false, 255)]
-        [BindColumn("weapon5_protect5_up", "是否可以触发武器池Up五星保底（抽中Up五星失效）", "int(255)")]
-        public Int32 Weapon5Protect5Up { get => _Weapon5Protect5Up; set { if (OnPropertyChanging("Weapon5Protect5Up", value)) { _Weapon5Protect5Up = value; OnPropertyChanged("Weapon5Protect5Up"); } } }
+        private Int32 _WeaponUp5Count;
+        /// <summary>抽取的武器Up池五星次数（低保用）</summary>
+        [DisplayName("抽取的武器Up池五星次数")]
+        [Description("抽取的武器Up池五星次数（低保用）")]
+        [DataObjectField(false, false, true, 255)]
+        [BindColumn("weapon_up5_count", "抽取的武器Up池五星次数（低保用）", "int(255)")]
+        public Int32 WeaponUp5Count { get => _WeaponUp5Count; set { if (OnPropertyChanging("WeaponUp5Count", value)) { _WeaponUp5Count = value; OnPropertyChanged("WeaponUp5Count"); } } }
 
-        private Int32 _Role5Protect5;
-        /// <summary>是否可以触发角色池五星保底（抽中五星失效）</summary>
-        [DisplayName("是否可以触发角色池五星保底")]
-        [Description("是否可以触发角色池五星保底（抽中五星失效）")]
-        [DataObjectField(false, false, false, 255)]
-        [BindColumn("role5_protect5", "是否可以触发角色池五星保底（抽中五星失效）", "int(255)")]
-        public Int32 Role5Protect5 { get => _Role5Protect5; set { if (OnPropertyChanging("Role5Protect5", value)) { _Role5Protect5 = value; OnPropertyChanged("Role5Protect5"); } } }
+        private Int32 _WeaponUp4Count;
+        /// <summary>抽取的武器Up池四星次数（低保用）</summary>
+        [DisplayName("抽取的武器Up池四星次数")]
+        [Description("抽取的武器Up池四星次数（低保用）")]
+        [DataObjectField(false, false, true, 255)]
+        [BindColumn("weapon_up4_count", "抽取的武器Up池四星次数（低保用）", "int(255)")]
+        public Int32 WeaponUp4Count { get => _WeaponUp4Count; set { if (OnPropertyChanging("WeaponUp4Count", value)) { _WeaponUp4Count = value; OnPropertyChanged("WeaponUp4Count"); } } }
 
-        private Int32 _Role5Protect5Up;
-        /// <summary>是否可以触发角色池Up五星保底（抽中五星失效）</summary>
-        [DisplayName("是否可以触发角色池Up五星保底")]
-        [Description("是否可以触发角色池Up五星保底（抽中五星失效）")]
-        [DataObjectField(false, false, false, 255)]
-        [BindColumn("role5_protect5_up", "是否可以触发角色池Up五星保底（抽中五星失效）", "int(255)")]
-        public Int32 Role5Protect5Up { get => _Role5Protect5Up; set { if (OnPropertyChanging("Role5Protect5Up", value)) { _Role5Protect5Up = value; OnPropertyChanged("Role5Protect5Up"); } } }
+        private Int32 _RoleUp5Count;
+        /// <summary>抽取的角色Up池五星次数（低保用）</summary>
+        [DisplayName("抽取的角色Up池五星次数")]
+        [Description("抽取的角色Up池五星次数（低保用）")]
+        [DataObjectField(false, false, true, 255)]
+        [BindColumn("role_up5_count", "抽取的角色Up池五星次数（低保用）", "int(255)")]
+        public Int32 RoleUp5Count { get => _RoleUp5Count; set { if (OnPropertyChanging("RoleUp5Count", value)) { _RoleUp5Count = value; OnPropertyChanged("RoleUp5Count"); } } }
+
+        private Int32 _RoleUp4Count;
+        /// <summary>抽取的角色Up池四星次数（低保用）</summary>
+        [DisplayName("抽取的角色Up池四星次数")]
+        [Description("抽取的角色Up池四星次数（低保用）")]
+        [DataObjectField(false, false, true, 255)]
+        [BindColumn("role_up4_count", "抽取的角色Up池四星次数（低保用）", "int(255)")]
+        public Int32 RoleUp4Count { get => _RoleUp4Count; set { if (OnPropertyChanging("RoleUp4Count", value)) { _RoleUp4Count = value; OnPropertyChanged("RoleUp4Count"); } } }
 
         private Int32 _PortectWeapon;
         /// <summary>累计的5星武器保底次数</summary>
@@ -113,30 +121,6 @@ namespace Db.Bot
         [DataObjectField(false, false, true, 255)]
         [BindColumn("portect_role", "累计的5星角色保底次数", "int(255)")]
         public Int32 PortectRole { get => _PortectRole; set { if (OnPropertyChanging("PortectRole", value)) { _PortectRole = value; OnPropertyChanged("PortectRole"); } } }
-
-        private Int32 _ResidentCount;
-        /// <summary>抽取的常驻池次数</summary>
-        [DisplayName("抽取的常驻池次数")]
-        [Description("抽取的常驻池次数")]
-        [DataObjectField(false, false, true, 255)]
-        [BindColumn("resident_count", "抽取的常驻池次数", "int(255)")]
-        public Int32 ResidentCount { get => _ResidentCount; set { if (OnPropertyChanging("ResidentCount", value)) { _ResidentCount = value; OnPropertyChanged("ResidentCount"); } } }
-
-        private Int32 _WeaponUpCount;
-        /// <summary>抽取的武器Up池次数</summary>
-        [DisplayName("抽取的武器Up池次数")]
-        [Description("抽取的武器Up池次数")]
-        [DataObjectField(false, false, true, 255)]
-        [BindColumn("weapon_up_count", "抽取的武器Up池次数", "int(255)")]
-        public Int32 WeaponUpCount { get => _WeaponUpCount; set { if (OnPropertyChanging("WeaponUpCount", value)) { _WeaponUpCount = value; OnPropertyChanged("WeaponUpCount"); } } }
-
-        private Int32 _RoleUpCount;
-        /// <summary>抽取的角色Up池次数</summary>
-        [DisplayName("抽取的角色Up池次数")]
-        [Description("抽取的角色Up池次数")]
-        [DataObjectField(false, false, true, 255)]
-        [BindColumn("role_up_count", "抽取的角色Up池次数", "int(255)")]
-        public Int32 RoleUpCount { get => _RoleUpCount; set { if (OnPropertyChanging("RoleUpCount", value)) { _RoleUpCount = value; OnPropertyChanged("RoleUpCount"); } } }
 
         private Int32 _Resident;
         /// <summary>累计抽取的常驻池次数</summary>
@@ -282,16 +266,14 @@ namespace Db.Bot
                     case "Primogem": return _Primogem;
                     case "AcquaintFate": return _AcquaintFate;
                     case "IntertwinedFate": return _IntertwinedFate;
-                    case "ResidentProtect5": return _ResidentProtect5;
-                    case "Weapon5Protect5": return _Weapon5Protect5;
-                    case "Weapon5Protect5Up": return _Weapon5Protect5Up;
-                    case "Role5Protect5": return _Role5Protect5;
-                    case "Role5Protect5Up": return _Role5Protect5Up;
+                    case "Resident5Count": return _Resident5Count;
+                    case "Resident4Count": return _Resident4Count;
+                    case "WeaponUp5Count": return _WeaponUp5Count;
+                    case "WeaponUp4Count": return _WeaponUp4Count;
+                    case "RoleUp5Count": return _RoleUp5Count;
+                    case "RoleUp4Count": return _RoleUp4Count;
                     case "PortectWeapon": return _PortectWeapon;
                     case "PortectRole": return _PortectRole;
-                    case "ResidentCount": return _ResidentCount;
-                    case "WeaponUpCount": return _WeaponUpCount;
-                    case "RoleUpCount": return _RoleUpCount;
                     case "Resident": return _Resident;
                     case "WeaponUp": return _WeaponUp;
                     case "RoleUp": return _RoleUp;
@@ -320,16 +302,14 @@ namespace Db.Bot
                     case "Primogem": _Primogem = value.ToInt(); break;
                     case "AcquaintFate": _AcquaintFate = value.ToInt(); break;
                     case "IntertwinedFate": _IntertwinedFate = value.ToInt(); break;
-                    case "ResidentProtect5": _ResidentProtect5 = value.ToInt(); break;
-                    case "Weapon5Protect5": _Weapon5Protect5 = value.ToInt(); break;
-                    case "Weapon5Protect5Up": _Weapon5Protect5Up = value.ToInt(); break;
-                    case "Role5Protect5": _Role5Protect5 = value.ToInt(); break;
-                    case "Role5Protect5Up": _Role5Protect5Up = value.ToInt(); break;
+                    case "Resident5Count": _Resident5Count = value.ToInt(); break;
+                    case "Resident4Count": _Resident4Count = value.ToInt(); break;
+                    case "WeaponUp5Count": _WeaponUp5Count = value.ToInt(); break;
+                    case "WeaponUp4Count": _WeaponUp4Count = value.ToInt(); break;
+                    case "RoleUp5Count": _RoleUp5Count = value.ToInt(); break;
+                    case "RoleUp4Count": _RoleUp4Count = value.ToInt(); break;
                     case "PortectWeapon": _PortectWeapon = value.ToInt(); break;
                     case "PortectRole": _PortectRole = value.ToInt(); break;
-                    case "ResidentCount": _ResidentCount = value.ToInt(); break;
-                    case "WeaponUpCount": _WeaponUpCount = value.ToInt(); break;
-                    case "RoleUpCount": _RoleUpCount = value.ToInt(); break;
                     case "Resident": _Resident = value.ToInt(); break;
                     case "WeaponUp": _WeaponUp = value.ToInt(); break;
                     case "RoleUp": _RoleUp = value.ToInt(); break;
@@ -371,35 +351,29 @@ namespace Db.Bot
             /// <summary>纠缠之源数量</summary>
             public static readonly Field IntertwinedFate = FindByName("IntertwinedFate");
 
-            /// <summary>是否可以触发常驻五星保底（抽中五星失效）</summary>
-            public static readonly Field ResidentProtect5 = FindByName("ResidentProtect5");
+            /// <summary>抽取的常驻池五星次数（低保用）</summary>
+            public static readonly Field Resident5Count = FindByName("Resident5Count");
 
-            /// <summary>是否可以触发武器池五星保底（抽中五星失效）</summary>
-            public static readonly Field Weapon5Protect5 = FindByName("Weapon5Protect5");
+            /// <summary>抽取的常驻池四星次数（低保用）</summary>
+            public static readonly Field Resident4Count = FindByName("Resident4Count");
 
-            /// <summary>是否可以触发武器池Up五星保底（抽中Up五星失效）</summary>
-            public static readonly Field Weapon5Protect5Up = FindByName("Weapon5Protect5Up");
+            /// <summary>抽取的武器Up池五星次数（低保用）</summary>
+            public static readonly Field WeaponUp5Count = FindByName("WeaponUp5Count");
 
-            /// <summary>是否可以触发角色池五星保底（抽中五星失效）</summary>
-            public static readonly Field Role5Protect5 = FindByName("Role5Protect5");
+            /// <summary>抽取的武器Up池四星次数（低保用）</summary>
+            public static readonly Field WeaponUp4Count = FindByName("WeaponUp4Count");
 
-            /// <summary>是否可以触发角色池Up五星保底（抽中五星失效）</summary>
-            public static readonly Field Role5Protect5Up = FindByName("Role5Protect5Up");
+            /// <summary>抽取的角色Up池五星次数（低保用）</summary>
+            public static readonly Field RoleUp5Count = FindByName("RoleUp5Count");
+
+            /// <summary>抽取的角色Up池四星次数（低保用）</summary>
+            public static readonly Field RoleUp4Count = FindByName("RoleUp4Count");
 
             /// <summary>累计的5星武器保底次数</summary>
             public static readonly Field PortectWeapon = FindByName("PortectWeapon");
 
             /// <summary>累计的5星角色保底次数</summary>
             public static readonly Field PortectRole = FindByName("PortectRole");
-
-            /// <summary>抽取的常驻池次数</summary>
-            public static readonly Field ResidentCount = FindByName("ResidentCount");
-
-            /// <summary>抽取的武器Up池次数</summary>
-            public static readonly Field WeaponUpCount = FindByName("WeaponUpCount");
-
-            /// <summary>抽取的角色Up池次数</summary>
-            public static readonly Field RoleUpCount = FindByName("RoleUpCount");
 
             /// <summary>累计抽取的常驻池次数</summary>
             public static readonly Field Resident = FindByName("Resident");
@@ -470,35 +444,29 @@ namespace Db.Bot
             /// <summary>纠缠之源数量</summary>
             public const String IntertwinedFate = "IntertwinedFate";
 
-            /// <summary>是否可以触发常驻五星保底（抽中五星失效）</summary>
-            public const String ResidentProtect5 = "ResidentProtect5";
+            /// <summary>抽取的常驻池五星次数（低保用）</summary>
+            public const String Resident5Count = "Resident5Count";
 
-            /// <summary>是否可以触发武器池五星保底（抽中五星失效）</summary>
-            public const String Weapon5Protect5 = "Weapon5Protect5";
+            /// <summary>抽取的常驻池四星次数（低保用）</summary>
+            public const String Resident4Count = "Resident4Count";
 
-            /// <summary>是否可以触发武器池Up五星保底（抽中Up五星失效）</summary>
-            public const String Weapon5Protect5Up = "Weapon5Protect5Up";
+            /// <summary>抽取的武器Up池五星次数（低保用）</summary>
+            public const String WeaponUp5Count = "WeaponUp5Count";
 
-            /// <summary>是否可以触发角色池五星保底（抽中五星失效）</summary>
-            public const String Role5Protect5 = "Role5Protect5";
+            /// <summary>抽取的武器Up池四星次数（低保用）</summary>
+            public const String WeaponUp4Count = "WeaponUp4Count";
 
-            /// <summary>是否可以触发角色池Up五星保底（抽中五星失效）</summary>
-            public const String Role5Protect5Up = "Role5Protect5Up";
+            /// <summary>抽取的角色Up池五星次数（低保用）</summary>
+            public const String RoleUp5Count = "RoleUp5Count";
+
+            /// <summary>抽取的角色Up池四星次数（低保用）</summary>
+            public const String RoleUp4Count = "RoleUp4Count";
 
             /// <summary>累计的5星武器保底次数</summary>
             public const String PortectWeapon = "PortectWeapon";
 
             /// <summary>累计的5星角色保底次数</summary>
             public const String PortectRole = "PortectRole";
-
-            /// <summary>抽取的常驻池次数</summary>
-            public const String ResidentCount = "ResidentCount";
-
-            /// <summary>抽取的武器Up池次数</summary>
-            public const String WeaponUpCount = "WeaponUpCount";
-
-            /// <summary>抽取的角色Up池次数</summary>
-            public const String RoleUpCount = "RoleUpCount";
 
             /// <summary>累计抽取的常驻池次数</summary>
             public const String Resident = "Resident";
