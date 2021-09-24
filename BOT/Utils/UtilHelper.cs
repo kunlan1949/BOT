@@ -107,6 +107,68 @@ namespace BOT.Utils
            
             return dStr;
         }
+
+        /// 字符串转Unicode码
+        /// </summary>
+        /// <returns>The to unicode.</returns>
+        /// <param name="value">Value.</param>
+        public static string StringToUnicode(string value)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(value);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < bytes.Length; i += 2)
+            {
+                // 取两个字符，每个字符都是右对齐。
+                stringBuilder.AppendFormat("u{0}{1}", bytes[i + 1].ToString("x").PadLeft(2, '0'), bytes[i].ToString("x").PadLeft(2, '0'));
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// 字符串转Unicode码
+        /// </summary>
+        /// <returns>The to unicode.</returns>
+        /// <param name="value">Value.</param>
+        public static string StringToGBK(string value)
+        { 
+            StringBuilder stringBuilder = new StringBuilder();
+            //汉字转成GBK十六进制码：
+           
+            byte[] gbk = Encoding.GetEncoding("GBK").GetBytes(value);
+            string s1 = ""; string s1d = "";
+            foreach (byte b in gbk)
+            {
+                //s1 += Convert.ToString(b, 16)+" ";
+                s1 += string.Format("{0:X2}", b) + " ";
+                s1d += b + " ";
+            }
+            return s1;
+        }
+       
+    public static int getRandomNum(int min, int max)
+        {
+            int minNum = 0;
+            int num = 0;
+            Random rdm = getGRand();
+            num = rdm.Next(min,max);
+            return num;
+
+        }
+        public static int getRandomNum(int max)
+        {
+            int minNum = 0;
+            int num = 0;
+            Random rdm = getGRand();
+            num = rdm.Next(0, max);
+            return num;
+
+        }
+        public static Random getGRand()
+        {
+            byte[] buffer = Guid.NewGuid().ToByteArray();//生成字节数组
+            int iRoot = BitConverter.ToInt32(buffer, 0);//利用BitConvert方法把字节数组转换为整数
+            Random rdmNum = new Random(iRoot);//以这个生成的整数为种子
+            return rdmNum;
+        }
     }
     
 }

@@ -71,6 +71,10 @@ namespace BOT.Helper
             {
                 commandType = CommandType.IGUSS;
             }
+            else if (c[0].Contains(CommandType.ISOLI))
+            {
+                commandType = CommandType.ISOLI;
+            }
             else if (c[0].Contains(CommandType.TWENTYONE))
             {
                 commandType = CommandType.TWENTYONE;
@@ -83,6 +87,11 @@ namespace BOT.Helper
             {
                 needParam = false;
                 commandType = CommandType.TRANS;
+            }
+            else if (c[0].Contains(CommandType.PLAYSONG))
+            {
+                needParam = false;
+                commandType = CommandType.PLAYSONG;
             }
             else if (c[0].Contains(CommandType.SGAME))
             {

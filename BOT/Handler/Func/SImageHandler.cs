@@ -22,7 +22,7 @@ namespace BOT.Handler.Func
     {
 
 
-        public static async Task exeAsync(Members mem, Groups g, CommandAttribute command, GroupMessageReceiver messageReceiver)
+        public static async Task execAsync(Members mem, Groups g, CommandAttribute command, GroupMessageReceiver messageReceiver)
         {
             if (mem.MemLimit > 5)
             {

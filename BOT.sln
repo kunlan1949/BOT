@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BOT", "BOT\BOT.csproj", "{1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiraiNetLibrary", "MiraiNetLibrary\MiraiNetLibrary.csproj", "{795ABD6B-B3D5-4744-BCB4-FB11B0EC3B20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{F96008FA-0D5B-4EAC-A699-DEE865A3766D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{F96008FA-0D5B-4EAC-A699-DEE865A3766D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeteaseCloudMusicApi", "NeteaseCloudMusicApi\NeteaseCloudMusicApi.csproj", "{272C1BAE-C55B-4FBA-8450-C2904D2E7CF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F96008FA-0D5B-4EAC-A699-DEE865A3766D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F96008FA-0D5B-4EAC-A699-DEE865A3766D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F96008FA-0D5B-4EAC-A699-DEE865A3766D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{272C1BAE-C55B-4FBA-8450-C2904D2E7CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{272C1BAE-C55B-4FBA-8450-C2904D2E7CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{272C1BAE-C55B-4FBA-8450-C2904D2E7CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{272C1BAE-C55B-4FBA-8450-C2904D2E7CF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

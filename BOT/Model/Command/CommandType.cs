@@ -33,6 +33,7 @@ namespace BOT.Model
        
         public static string WEATHER = "天气";
         public static string IGUSS = "我猜";
+        public static string ISOLI = "我接";
         public static string CANCEL = "结束";
         public static string LOTTERY = "大乐透";
         public static string CASHPRIZE = "兑奖";
@@ -40,6 +41,7 @@ namespace BOT.Model
         public static string LUCKY = "运势";
         public static string TRANS = "翻译";
         public static string SGAME = "查游戏";
+        public static string PLAYSONG = "点歌";
         public static string GENSHIN = "祈愿";
 
         ///增加复读关键字

@@ -1,5 +1,6 @@
 ﻿using BOT.Actions;
 using BOT.Handler.Func;
+using BOT.Handler.Game;
 using BOT.Helper;
 using BOT.Model;
 using BOT.Model.Game;
@@ -94,10 +95,17 @@ namespace BOT.Handler
                     }
                     #endregion
 
+                    #region 成语接龙
+                    else if (command.Target.Contains(TargetType.CHENGYU))
+                    {
+                        await ChengyuHandler.execAsync(mem, g, command, messageReceiver);
+                    }
+                    #endregion
+
                     #region 识图
                     else if (command.Target.Contains(TargetType.SIMAGE))
                     {
-                        await SImageHandler.exeAsync(mem,g,command,messageReceiver);
+                        await SImageHandler.execAsync(mem, g, command, messageReceiver);
                     }
                     #endregion
 
@@ -191,6 +199,16 @@ namespace BOT.Handler
                     }
                 }
                 #endregion
+                else if (command.CommandType.Contains(CommandType.PLAYSONG))
+                {
+                    await SongHandler.execAsync(mem, g, command, messageReceiver);
+                }
+                #region 我接
+                else if (command.CommandType.Contains(CommandType.ISOLI))
+                {
+                    await ChengyuHandler.SoliAsync(mem, g, command, messageReceiver);
+                }
+                #endregion
 
                 #region 取消
                 else if (command.CommandType.Contains(CommandType.CANCEL))
@@ -214,7 +232,22 @@ namespace BOT.Handler
                     }
                     else if (TargetType.CHENGYU.Contains(command.Target) && !g.GrpChengyu.Contains("-1"))
                     {
-
+                        if (g.GrpChengyu.Contains("1"))
+                        {
+                            await sendGroupAsync(messageReceiver, $"已结束{TargetType.CHENGYU}!");
+                            var game = GamesStatus.Find(GamesStatus._.GameGroup == g.GrpId & GamesStatus._.GameType == 1 & GamesStatus._.GameStatus == 0);
+                            if (game != null)
+                            {
+                                game.GameStatus = "1";
+                                g.GrpChengyu = "0";
+                                game.Update();
+                                g.Update();
+                            }
+                        }
+                        else
+                        {
+                            await sendGroupAsync(messageReceiver, $"错误，{TargetType.GUSSNUM}未开始!");
+                        }
                     }
                     else
                     {
@@ -222,7 +255,7 @@ namespace BOT.Handler
                     }
                 }
                 #endregion
-                
+
                 #region 大乐透
                 else if (command.CommandType.Contains(CommandType.LOTTERY))
                 {

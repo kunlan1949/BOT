@@ -42,11 +42,11 @@ namespace Db.Bot
         public String GameParams { get => _GameParams; set { if (OnPropertyChanging("GameParams", value)) { _GameParams = value; OnPropertyChanged("GameParams"); } } }
 
         private String _GameStatus;
-        /// <summary>游戏状态 0为结束，1为开始</summary>
-        [DisplayName("游戏状态0为结束")]
-        [Description("游戏状态 0为结束，1为开始")]
+        /// <summary>游戏状态 1为结束，0为开始</summary>
+        [DisplayName("游戏状态1为结束")]
+        [Description("游戏状态 1为结束，0为开始")]
         [DataObjectField(false, false, false, 255)]
-        [BindColumn("game_status", "游戏状态 0为结束，1为开始", "varchar(255)")]
+        [BindColumn("game_status", "游戏状态 1为结束，0为开始", "varchar(255)")]
         public String GameStatus { get => _GameStatus; set { if (OnPropertyChanging("GameStatus", value)) { _GameStatus = value; OnPropertyChanged("GameStatus"); } } }
 
         private String _GameGroup;
@@ -124,7 +124,7 @@ namespace Db.Bot
             /// <summary>游戏参数</summary>
             public static readonly Field GameParams = FindByName("GameParams");
 
-            /// <summary>游戏状态 0为结束，1为开始</summary>
+            /// <summary>游戏状态 1为结束，0为开始</summary>
             public static readonly Field GameStatus = FindByName("GameStatus");
 
             /// <summary>发起游戏的群号</summary>
@@ -151,7 +151,7 @@ namespace Db.Bot
             /// <summary>游戏参数</summary>
             public const String GameParams = "GameParams";
 
-            /// <summary>游戏状态 0为结束，1为开始</summary>
+            /// <summary>游戏状态 1为结束，0为开始</summary>
             public const String GameStatus = "GameStatus";
 
             /// <summary>发起游戏的群号</summary>

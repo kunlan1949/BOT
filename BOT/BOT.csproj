@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MiraiNetLibrary\MiraiNetLibrary.csproj" />
+    <ProjectReference Include="..\NeteaseCloudMusicApi\NeteaseCloudMusicApi.csproj" />
     <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 

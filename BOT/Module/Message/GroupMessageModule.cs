@@ -48,7 +48,8 @@ namespace BOT.Module
                             || m.Result.CommandType.Contains(CommandType.CASHPRIZE) || m.Result.CommandType.Contains(CommandType.LUCKY) 
                             || m.Result.CommandType.Contains(CommandType.WEATHER) || m.Result.CommandType.Contains(CommandType.TWENTYONE) 
                             || m.Result.CommandType.Contains(CommandType.TRANS) || m.Result.CommandType.Contains(CommandType.SGAME)
-                            || m.Result.CommandType.Contains(CommandType.GENSHIN))
+                            || m.Result.CommandType.Contains(CommandType.GENSHIN) || m.Result.CommandType.Contains(CommandType.ISOLI)
+                            || m.Result.CommandType.Contains(CommandType.PLAYSONG))
                         {
                             var g = Groups.Find(Groups._.GrpId == receiver.Sender.Group.Id);
                             Console.WriteLine("互动模式");

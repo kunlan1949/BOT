@@ -471,6 +471,9 @@
     <None Update="Res\Image\Weapon\龙脊长枪.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Res\nk.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Res\warning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
